@@ -1,0 +1,49 @@
+name: A2.2 CPU evidence
+
+on:
+  push:
+    branches:
+      - validation/environment-benchmarks
+    paths:
+      - .github/workflows/a22-cpu-evidence.yml
+      - scripts/lawless_p18_a22_colab_cell_candidate.py
+      - scripts/run_a22_cpu_benchmark.py
+
+permissions:
+  contents: read
+
+jobs:
+  cpu-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Prepare artifact directory
+        run: mkdir -p artifacts/a22-cpu
+
+      - name: Install project dependencies
+        timeout-minutes: 20
+        run: pip install -e '.[dev]'
+
+      - name: Run exact-checkpoint CPU evidence cell
+        timeout-minutes: 65
+        run: |
+          python scripts/run_a22_cpu_benchmark.py \
+            --timeout-seconds 3600 \
+            --artifact-dir artifacts/a22-cpu
+
+      - name: Upload raw evidence and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lawless-a22-cpu-${{ github.run_id }}
+          path: artifacts/a22-cpu/
+          if-no-files-found: warn
+          retention-days: 14
