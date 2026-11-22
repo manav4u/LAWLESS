@@ -4,7 +4,7 @@ from dataclasses import replace
 import torch
 
 from lawless.environment import reset, step
-from tests.test_p1_batch_equivalence import (
+from test_p1_batch_equivalence import (
     _assert_world_state_equal,
     _assert_candidate_info_matches_batch,
     _candidate_reference,
