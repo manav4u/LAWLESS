@@ -1,0 +1,17 @@
+{
+  "base_commit": "ac7e0471ae314460d6f72036a33f9a2e3a198bc5",
+  "frozen_p0_tag_commit": "d82d8e1d910285b4d95ca7a64ad71d4a2437a883",
+  "frozen_python_files_verified": 20,
+  "files": {
+    "benchmarks/environment_benchmark.py": "ebae7ba6e709e152642b2b7e34015c62a11042b5e6c068ddf6666c2ba8f15e9c",
+    "tests/test_environment_benchmark.py": "15960a0fec0fb074ed70c239d0bc3f77125f9ca9678c452576722bffc17f0641",
+    "tests/test_environment_benchmark_regressions.py": "b7279e0d3ce9e299181d3e736c97e30741992ea25a3971abe5f924b3e69925a4"
+  },
+  "evidence_handling": {
+    "cpu_suite.txt": {
+      "change": "Execution-root prefix removed from two warning locations; all test results and warnings unchanged.",
+      "original_capture_sha256": "9e61a345d3a6679a6610a240905e6622f58d84c4015be066b2b28650064613bd",
+      "saved_evidence_sha256": "d00729831675febc10e8d4bb4e9ae091379f8e2c9e66a2cf2e36a686e42577ac"
+    }
+  }
+}
