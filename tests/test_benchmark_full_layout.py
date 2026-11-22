@@ -1,3 +1,7 @@
+import importlib.util
+import sys
+from pathlib import Path
+
 import torch
 
 from lawless.world.config import (
@@ -6,10 +10,27 @@ from lawless.world.config import (
     ObjectiveConfig,
     WorldConfig,
 )
-from scripts.benchmark_full_layout import (
-    _run_with_state_capture,
-    _same_outcome,
+
+_BENCHMARK_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "scripts"
+    / "benchmark_full_layout.py"
 )
+_BENCHMARK_SPEC = importlib.util.spec_from_file_location(
+    "_lawless_benchmark_full_layout",
+    _BENCHMARK_PATH,
+)
+if _BENCHMARK_SPEC is None or _BENCHMARK_SPEC.loader is None:
+    raise ImportError(
+        f"Could not load benchmark module from {_BENCHMARK_PATH}"
+    )
+
+_BENCHMARK_MODULE = importlib.util.module_from_spec(_BENCHMARK_SPEC)
+sys.modules[_BENCHMARK_SPEC.name] = _BENCHMARK_MODULE
+_BENCHMARK_SPEC.loader.exec_module(_BENCHMARK_MODULE)
+
+_run_with_state_capture = _BENCHMARK_MODULE._run_with_state_capture
+_same_outcome = _BENCHMARK_MODULE._same_outcome
 
 
 def _config(
