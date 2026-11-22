@@ -87,7 +87,7 @@ P0 physics acceptance requires:
 | Angular velocity | 0.0 |
 | Energy | 0.0 |
 
-* The stronger every-step validator is pending final execution on the exact freeze candidate.
+* The stronger every-step validator was successfully executed on commit 669b13055c710242d74717f49d1f4266369a701d on a free-Colab T4 and locally on CPU, validating finite continuous state, energy bounds [0,100], and the wrapped angle interval [-pi,pi) at every step across 2400 steps (40.0 seconds); the final p0-validated tag will reference the exact commit that passes the final full-suite and validator rerun, including any subsequent documentation and evidence commits.
 
 ### Benchmark evidence
 

@@ -1,0 +1,28 @@
+{
+  "commit": "669b13055c710242d74717f49d1f4266369a701d",
+  "test_summary": "24 passed in 0.95s",
+  "duration_seconds": 40.0,
+  "steps": 2400,
+  "devices": [
+    "cpu",
+    "cuda"
+  ],
+  "checks_each_step": [
+    "finite_position",
+    "finite_velocity",
+    "finite_angle",
+    "finite_angular_velocity",
+    "finite_energy",
+    "energy_bounds_0_100_J",
+    "angle_bounds_minus_pi_inclusive_pi_exclusive"
+  ],
+  "alive_masks_match": true,
+  "max_abs_deviation": {
+    "position": 0.0001220703125,
+    "velocity": 3.814697265625e-06,
+    "angle": 0.0,
+    "angular_velocity": 0.0,
+    "energy": 0.0
+  },
+  "interpretation": "Long-rollout deviations are observational. Strict one-step CPU/CUDA agreement is tested separately."
+}
