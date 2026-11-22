@@ -1,0 +1,16 @@
+............................s.ss..ss................................ssss [ 45%]
+ssssssssssssssssssss....ssss......ssssss........................ssssssss [ 90%]
+ssssssssssssssss                                                         [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_p15_lidar.py:558: CUDA is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:619: CUDA hardware is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:754: CUDA hardware is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:1122: CUDA is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:1150: CUDA is unavailable
+SKIPPED [16] tests/test_p15_lidar.py:1174: CUDA is unavailable
+SKIPPED [4] tests/test_p15_lidar.py:1206: CUDA is unavailable
+SKIPPED [4] tests/test_p15_lidar.py:1306: CUDA is unavailable
+SKIPPED [6] tests/test_p15_lidar.py:1384: CUDA is unavailable
+SKIPPED [12] tests/test_p15_lidar.py:1507: CUDA is unavailable
+SKIPPED [12] tests/test_p15_lidar.py:1543: CUDA is unavailable
+97 passed, 63 skipped in 0.57s
