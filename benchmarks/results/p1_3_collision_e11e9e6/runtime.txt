@@ -1,0 +1,7 @@
+Source commit: e11e9e669cad23716336a65ec19f1ab1d60a6a5e
+Python: 3.13.16
+PyTorch: 2.14.1+cu130
+CUDA build: 13.0
+CUDA available: True
+GPU: Tesla T4
+VRAM (GiB): 14.56
