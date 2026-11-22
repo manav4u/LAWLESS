@@ -93,9 +93,9 @@ def test_cpu_cuda_numerical_agreement():
     s.velocity.uniform_(-1, 1); s.angle.uniform_(-3, 3)
     s.angular_velocity.uniform_(-1, 1); s.energy.uniform_(0, 100)
     a = torch.rand(4, 256, 2) * 2 - 1
-    g = torch.randn(4, 2)
+    g = torch.randn(4, 1, 2)
     cpu_next, _ = step(s, a, g, cfg)
     gpu_next, _ = step(s.to("cuda"), a.cuda(), g.cuda(), cfg)
     for f in ("position", "velocity", "angle", "angular_velocity", "energy"):
-        torch.testing.assert_close(getattr(cpu_next, f), getattr(gpu_next, f), rtol=1e-5, atol=1e-6)
+        torch.testing.assert_close(getattr(cpu_next, f), getattr(gpu_next, f).cpu(), rtol=1e-5, atol=1e-6)
     assert torch.equal(cpu_next.alive, gpu_next.alive.cpu())
