@@ -1,0 +1,31 @@
+{
+  "candidate_ci_url": "https://github.com/manav4u/LAWLESS/actions/runs/45006834337",
+  "colab_t4_tests": {
+    "passed": 407,
+    "skipped": 0
+  },
+  "cpu_tests": {
+    "passed": 391,
+    "skipped_cuda_unavailable": 16
+  },
+  "evidence_date": "2026-11-22",
+  "files_sha256": {
+    "README.md": "a53211a7af4c0fbe292a65f9f7e44f5a005b44bcfad938dfdd1c1682d95c2ee1",
+    "colab_cpu_torch_cu130.jsonl": "3c48a65d9d69584a26175b669944b613a0548b97ebd4a0d718c53832afe7b917",
+    "colab_cuda_t4.jsonl": "798d234f805b2c56536b55db5fde8ef44f2f144a8f172892bf9b33e59061fcb3",
+    "colab_p0_validation.txt": "533fb6e0574c79b6d02c2cf12585c69f19dac3ddb9a81dfd4a7e9209614a36a2",
+    "colab_t4_tests.txt": "0fa321022b3d4c1ff4ec029787d0e73a371a7cf8d0f08c153ea61e789b439b0e",
+    "cpu_p0_validation.txt": "d888e4c97e9d28b75cb51b13b0c3b2e73ff420b32d6607017ac53c3cfc68a468",
+    "cpu_tests.txt": "8d24c0ca870d2d198965c81f0ad9d20943adef76ed78f9a4624a80fcb75c9c57",
+    "cpu_torch_cpu.jsonl": "75c091cd8b46c615fea15536223e7ca704f64c9896b418697a1f273acb13f9dd",
+    "early_obstacle_exhaustion_cpu.jsonl": "59c8cdfbf87dc4ea063a8333c01cad02452ff12eb1d39d4f3325b88f25c2d9f7"
+  },
+  "p0_validation": {
+    "colab_t4": "passed",
+    "cpu": "passed",
+    "simulated_seconds": 40.0,
+    "steps": 2400
+  },
+  "repository": "https://github.com/manav4u/LAWLESS",
+  "validated_source_commit": "45c1f5d887f969463df16b38517b77481c7b4400"
+}

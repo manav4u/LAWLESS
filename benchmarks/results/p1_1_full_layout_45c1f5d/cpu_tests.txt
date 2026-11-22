@@ -1,0 +1,19 @@
+...............................ss....................................... [ 17%]
+...................s.................................................... [ 35%]
+........................................................................ [ 53%]
+........................................................................ [ 70%]
+........ssss.....ss......s......................................ss...... [ 88%]
+.........ss...........................s....s...                          [100%]
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_full_generator.py:361: CUDA unavailable
+SKIPPED [1] tests/test_p1_boundaries.py:178: CUDA is not available
+SKIPPED [2] tests/test_p1_generated_world.py:396: CUDA is not available
+SKIPPED [2] tests/test_p1_generated_world.py:445: CUDA is not available
+SKIPPED [2] tests/test_p1_obstacle_rng_helper.py:116: CUDA unavailable
+SKIPPED [1] tests/test_p1_obstacle_rng_helper.py:354: CUDA unavailable
+SKIPPED [2] tests/test_p1_world_generator.py:425: CUDA is not available
+SKIPPED [1] tests/test_p1_world_geometry.py:158: CUDA is not available
+SKIPPED [1] tests/test_p1_world_geometry.py:172: CUDA is not available
+SKIPPED [1] tests/test_p1_world_state.py:261: CUDA is not available
+SKIPPED [1] tests/test_simulator.py:88: CUDA unavailable
+391 passed, 16 skipped in 0.82s
