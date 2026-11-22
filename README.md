@@ -4,7 +4,7 @@
 
 LAWLESS investigates whether evolution can produce agents whose within-lifetime learning mechanisms improve adaptation after unexpected changes in environmental dynamics.
 
-> Current status: **P0 — deterministic physics foundation**. No learning or intelligence claims are made by the P0 engine.
+> Current status: P0 validated and frozen; P1.0-P1.1 complete. P0 is the deterministic physics foundation and remains frozen at the validated baseline. P1.0 configuration/API work and P1.1 world geometry and full seeded world-layout generation are complete and integrated on main. P1.2 embodiment and lifecycle work is in progress; independent per-agent core-collection bookkeeping remains outstanding. Later P1 work, including episode execution and observation integration, is not complete. Controller comparisons, optimization, training, and evolution are future work and are not implemented. P1.1 benchmark and validation evidence is available at [benchmarks/results/p1_1_full_layout_45c1f5d/README.md](benchmarks/results/p1_1_full_layout_45c1f5d/README.md).
 
 ## V1 decisions
 
@@ -87,7 +87,7 @@ P0 physics acceptance requires:
 | Angular velocity | 0.0 |
 | Energy | 0.0 |
 
-* The stronger every-step validator was successfully executed on commit 669b13055c710242d74717f49d1f4266369a701d on a free-Colab T4 and locally on CPU, validating finite continuous state, energy bounds [0,100], and the wrapped angle interval [-pi,pi) at every step across 2400 steps (40.0 seconds); the final p0-validated tag will reference the exact commit that passes the final full-suite and validator rerun, including any subsequent documentation and evidence commits.
+* The stronger every-step validator was successfully executed on historical commit 669b13055c710242d74717f49d1f4266369a701d on a free-Colab T4 and locally on CPU, validating finite continuous state, energy bounds [0,100], and the wrapped angle interval [-pi,pi) at every step across 2400 steps (40.0 seconds). The validated P0 baseline is now recorded by the p0-validated tag at exact commit d82d8e1d910285b4d95ca7a64ad71d4a2437a883. The tag is frozen and must not be moved. The historical 669b130 validator evidence remains historical evidence and is not being relabelled as the tagged commit.
 
 ### Benchmark evidence
 
