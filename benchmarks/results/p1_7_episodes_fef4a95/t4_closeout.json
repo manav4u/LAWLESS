@@ -1,0 +1,27 @@
+{
+  "candidate_commit": "fef4a95d6ced1464c0ceae283cfea5b9284398fa",
+  "files_deleted": false,
+  "frozen_p0_tag": "p0-validated",
+  "frozen_p0_tag_commit": "d82d8e1d910285b4d95ca7a64ad71d4a2437a883",
+  "frozen_p0_validator_byte_exact": true,
+  "frozen_physics_directory_byte_exact": true,
+  "generated_install_metadata_retained": true,
+  "installation_performed": false,
+  "metadata_identity": {
+    "Name": "lawless-sim",
+    "Version": "0.1.0"
+  },
+  "project_source_modified": false,
+  "staged_changes": 0,
+  "tests_rerun": false,
+  "tracked_project_source_changes": 0,
+  "untracked_content": [
+    "lawless_sim.egg-info/PKG-INFO",
+    "lawless_sim.egg-info/SOURCES.txt",
+    "lawless_sim.egg-info/dependency_links.txt",
+    "lawless_sim.egg-info/requires.txt",
+    "lawless_sim.egg-info/top_level.txt"
+  ],
+  "untracked_content_verified_within_install_metadata": true,
+  "working_tree_empty": false
+}

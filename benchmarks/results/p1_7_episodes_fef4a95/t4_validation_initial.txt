@@ -1,0 +1,66 @@
+COMMAND: git fetch origin validation/episodes
+From https://github.com/manav4u/LAWLESS
+ * branch            validation/episodes -> FETCH_HEAD
+RETURN_CODE: 0
+COMMAND: git checkout --detach fef4a95d6ced1464c0ceae283cfea5b9284398fa
+HEAD is now at fef4a95 feat(environment): compose deterministic P1.7 episodes
+RETURN_CODE: 0
+VALIDATED_BRANCH: validation/episodes
+VALIDATED_HEAD_BEFORE: fef4a95d6ced1464c0ceae283cfea5b9284398fa
+RUNTIME_BEFORE_INSTALL: {"platform": "Linux-6.6.159+-x86_64-with-glibc2.39", "python": "3.13.16"}
+COMMAND: /usr/bin/python3 -m pip install -q -e .[dev]
+RETURN_CODE: 0
+RUNTIME: {"candidate_branch": "validation/episodes", "candidate_commit": "fef4a95d6ced1464c0ceae283cfea5b9284398fa", "cuda": "13.0", "cuda_available": true, "cuda_device_count": 1, "gpu": "Tesla T4", "platform": "Linux-6.6.159+-x86_64-with-glibc2.39", "python": "3.13.16", "torch": "2.14.1+cu130", "vram_gib": 14.56}
+CUDA_DEVICE_INITIALIZED: Tesla T4
+FULL_PYTEST_BEGIN
+........................................................................ [  6%]
+........................................................................ [ 13%]
+........................................................................ [ 20%]
+........................................................................ [ 26%]
+........................................................................ [ 33%]
+........................................................................ [ 40%]
+........................................................................ [ 47%]
+........................................................................ [ 53%]
+........................................................................ [ 60%]
+........................................................................ [ 67%]
+........................................................................ [ 74%]
+........................................................................ [ 80%]
+........................................................................ [ 87%]
+........................................................................ [ 94%]
+..............................................................           [100%]
+=============================== warnings summary ===============================
+tests/test_p13_collision.py: 17 warnings
+  /content/LAWLESS/tests/test_p13_collision.py:26: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    centers=torch.tensor(centers, dtype=dtype).reshape(-1, 2),
+
+tests/test_p13_collision.py: 17 warnings
+  /content/LAWLESS/tests/test_p13_collision.py:27: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    radii=torch.tensor(radii, dtype=dtype).reshape(-1),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1070 passed, 34 warnings in 138.50s (0:02:18)
+
+
+FULL_PYTEST_RETURN_CODE: 0
+FULL_PYTEST_ACCEPTED: 1070 passed, 0 skipped, 0 failed
+P0_VALIDATOR_BEGIN
+position max_abs_deviation: 0.0001220703125
+velocity max_abs_deviation: 3.814697265625e-06
+angle max_abs_deviation: 0.0
+angular_velocity max_abs_deviation: 0.0
+energy max_abs_deviation: 0.0
+P0 validation: 2400 steps, 40.0 seconds
+
+
+P0_VALIDATOR_RETURN_CODE: 0
+
+---------------------------------------------------------------------------
+AssertionError                            Traceback (most recent call last)
+/content/1-lawless_p17_colab_validation.py in <module>
+    289 ).strip()
+    290 
+--> 291 assert not final_status, (
+    292     "Working tree changed during validation",
+    293     final_status,
+
+AssertionError: ('Working tree changed during validation', '?? lawless_sim.egg-info/')

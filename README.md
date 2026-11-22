@@ -4,13 +4,23 @@
 
 LAWLESS investigates whether evolution can produce agents whose within-lifetime learning mechanisms improve adaptation after unexpected changes in environmental dynamics.
 
-> **Project status:** P0 remains frozen. P1.0-P1.6 source validation is complete. P1.5 lidar source `3bd77e057e46f8026abd422baf034332261975bf` passed its full CPU suite (814 passed, 119 genuine CUDA skips) and full free Tesla T4 suite (933 passed, zero skips or failures); its source CI passed ([45028568460](https://github.com/manav4u/LAWLESS/actions/runs/45028568460)). Its documentation-only successor `a8ae378be04cea981819f82d4f7610d5f603baa9` was integrated on `main`; the recorded successor and main CI results are documented in the [P1.5 validation evidence](benchmarks/results/p1_5_lidar_3bd77e0/README.md). P1.6 observation assembly was validated at exact source commit `8a0b181c2d0aa7e93ed455fb783160b8db2f92cf`: full CPU suite 905 passed with 131 genuine CUDA skips; full free Tesla T4 suite 1,036 passed with zero skips or failures; the P0 2,400-step, 40-second validator passed on the same T4 HEAD. Its source CI passed ([45034642956](https://github.com/manav4u/LAWLESS/actions/runs/45034642956)). See [P1.6 observation validation evidence](benchmarks/results/p1_6_observations_8a0b181/README.md). Frozen P0 tag `p0-validated` remains at `d82d8e1d910285b4d95ca7a64ad71d4a2437a883`. P1.7-P1.8 and later controllers, optimization, training, and evolution remain incomplete. This is not overall project completion.
+> **Project status:** P1.7 continuous 2D episode source validation passed at exact source commit `fef4a95d6ced1464c0ceae283cfea5b9284398fa`: full CPU suite 937 passed with 133 genuine CUDA skips and zero failures; full actual free Tesla T4 suite 1,070 passed with zero skips or failures; the P0 2,400-step, 40-second validator returned successfully on the same T4. The source CI passed ([45042415737](https://github.com/manav4u/LAWLESS/actions/runs/45042415737)). See [P1.7 episode source-validation evidence](benchmarks/results/p1_7_episodes_fef4a95/README.md). P1.8 performance work remains open, as do later controllers, optimization, training, and evolution. This is not overall project completion.
+
+P0 remains frozen. P1.0-P1.6 source validation is complete.
+
+P1.5 lidar source `3bd77e057e46f8026abd422baf034332261975bf` passed its full CPU suite (814 passed, 119 genuine CUDA skips) and full free Tesla T4 suite (933 passed, zero skips or failures); its source CI passed ([45028568460](https://github.com/manav4u/LAWLESS/actions/runs/45028568460)). Its documentation-only successor `a8ae378be04cea981819f82d4f7610d5f603baa9` was integrated on `main`; the recorded successor and main CI results are documented in the [P1.5 validation evidence](benchmarks/results/p1_5_lidar_3bd77e0/README.md).
+
+P1.6 observation assembly was validated at exact source commit `8a0b181c2d0aa7e93ed455fb783160b8db2f92cf`: full CPU suite 905 passed with 131 genuine CUDA skips; full free Tesla T4 suite 1,036 passed with zero skips or failures; the P0 2,400-step, 40-second validator passed on the same T4 HEAD. Its source CI passed ([45034642956](https://github.com/manav4u/LAWLESS/actions/runs/45034642956)). See [P1.6 observation validation evidence](benchmarks/results/p1_6_observations_8a0b181/README.md).
+
+P1.7 source was validated on `validation/episodes`. At the time of that source validation, main was `c0ecad36767f8c79644fe6753f32fdb232a5fe13`. This evidence records successful CI for the validated source commit only, not for a future documentation successor or main integration.
+
+Frozen P0 tag `p0-validated` remains at `d82d8e1d910285b4d95ca7a64ad71d4a2437a883`.
 
 ## V1 decisions
 
 - Controllers: static feedforward, recurrent, and plastic (future milestones)
 - Optimizers: genetic algorithm, OpenAI-ES, and CMA-ES (future milestones)
-- Environment: continuous 2D navigation (future milestones)
+- Environment: continuous 2D navigation with generated worlds, agent episode state, observations, transitions, rewards, termination and truncation, and episode-level diagnostics; P1.8 performance work remains pending
 - Compute: hybrid CPU + CUDA where beneficial
 - P0: NumPy/PyTorch-compatible batched physics, validation, and benchmarks
 
@@ -39,7 +49,7 @@ Actions are clipped to [-1, 1]. Energy use is `dt * (P_thrust * abs(throttle) + 
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 pytest -q
 python benchmarks/physics_benchmark.py --agents 100 500 1000 2500 5000 --steps 2000

@@ -1,0 +1,12 @@
+{
+  "source_sha": "fef4a95d6ced1464c0ceae283cfea5b9284398fa",
+  "python": "3.10.12",
+  "torch": "2.14.1+cpu",
+  "cuda_available": false,
+  "passed": 937,
+  "skipped": 133,
+  "warnings": 34,
+  "seconds": 16.43,
+  "command": "python -m pytest -q -ra",
+  "result": "passed; CUDA tests genuinely unavailable on this CPU runtime"
+}
