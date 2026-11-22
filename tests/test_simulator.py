@@ -1,3 +1,4 @@
+import pytest
 import torch
 
 from lawless.physics.constants import PhysicsConfig
@@ -64,3 +65,37 @@ def test_dead_agent_is_fully_frozen():
             getattr(before, field),
             msg=f"Dead agent changed field: {field}",
         )
+
+
+def test_energy_boundary_full_step_actuation_contract():
+    cfg = PhysicsConfig(thrust_power=1.5, torque_power=0.5, dt=1/60)
+    g = torch.zeros(2)
+    a = torch.tensor([[1.0, 0.0]])
+    s = make_state(1, energy=0.0)
+    n, d = step(s, a, g, cfg)
+    assert not d["actuators_enabled"].any()
+    assert torch.equal(n.velocity, s.velocity)
+    assert n.energy.item() == 0.0
+    s = make_state(1, energy=0.025)
+    n, d = step(s, a, g, cfg)
+    assert d["actuators_enabled"].all()
+    assert n.energy.item() == 0.0
+    assert not n.alive.any()
+    assert n.velocity[0, 0] > 0
+
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA unavailable")
+def test_cpu_cuda_numerical_agreement():
+    torch.manual_seed(42)
+    cfg = PhysicsConfig()
+    s = make_state((4, 256))
+    s.velocity.uniform_(-1, 1); s.angle.uniform_(-3, 3)
+    s.angular_velocity.uniform_(-1, 1); s.energy.uniform_(0, 100)
+    a = torch.rand(4, 256, 2) * 2 - 1
+    g = torch.randn(4, 2)
+    cpu_next, _ = step(s, a, g, cfg)
+    gpu_next, _ = step(s.to("cuda"), a.cuda(), g.cuda(), cfg)
+    for f in ("position", "velocity", "angle", "angular_velocity", "energy"):
+        torch.testing.assert_close(getattr(cpu_next, f), getattr(gpu_next, f), rtol=1e-5, atol=1e-6)
+    assert torch.equal(cpu_next.alive, gpu_next.alive.cpu())
