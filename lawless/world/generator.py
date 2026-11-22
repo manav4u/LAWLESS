@@ -180,59 +180,49 @@ def _validate_final_geometry(
             )
 
 
-def generate_obstacle_world(
-    config: WorldConfig,
+def _generate_obstacles_with_rng(
     *,
+    width: float,
+    height: float,
+    count: int,
+    radius_min: float,
+    radius_max: float,
     seed: int,
-    device: torch.device | str = "cpu",
-    dtype: torch.dtype = torch.float32,
-    max_attempts_per_obstacle: int = 10_000,
-) -> WorldState:
-    """Generate one seeded world containing only non-overlapping obstacles.
+    generator: torch.Generator,
+    device: torch.device | str,
+    dtype: torch.dtype,
+    max_attempts_per_obstacle: int,
+) -> CircleObstacles:
+    """Generate obstacles using an already-seeded CPU RNG.
 
-    Args:
-        config: A canonical ``WorldConfig``. Its existing ``validate()``
-            contract is authoritative. The config is not mutated.
-        seed: Explicit nonnegative integer application seed in the inclusive
-            range [0, 2**63 - 1]. This is LAWLESS's seed policy, not a claim
-            about the full range accepted by torch.Generator.
-        device: Destination device, such as ``"cpu"`` or ``"cuda"``.
-        dtype: ``torch.float32`` or ``torch.float64`` only. Configured
-            obstacle-radius bounds are first rounded to this dtype; generated
-            radii must lie within those representable bounds.
-        max_attempts_per_obstacle: Maximum candidate placements per obstacle.
+    Private helper contract:
+      - ``generator`` must be a CPU torch.Generator supplied by the caller.
+      - This function never creates, seeds, or reseeds the generator.
+      - Every random draw and placement decision remains on CPU.
+      - Candidate draw order and rejection order are stable relative to
+        the validated obstacle-only generator.
+      - Device transfer occurs only after the complete layout is generated.
+      - The returned CircleObstacles is validated in its destination dtype.
 
-    Returns:
-        A validated single-world ``WorldState``. Zero obstacles are supported.
-
-    Raises:
-        TypeError or ValueError: Invalid arguments or configuration.
-        WorldGenerationError: A requested obstacle could not be placed within
-            its finite attempt budget. No partial world is returned.
-
-    Reproducibility:
-        Random draws are made on CPU using a private ``torch.Generator``.
-        The same seed, config, dtype, and PyTorch generator implementation
-        produce the same CPU-sampled layout. Transferring the generated
-        tensors to CPU or CUDA preserves their values exactly for the
-        supported dtypes. Bitwise reproducibility across different PyTorch
-        versions is not promised.
+    The scalar geometry arguments must already have been validated and
+    rounded to the requested output dtype by _validate_inputs.
     """
-    width, height, count, radius_min, radius_max = _validate_inputs(
-        config,
-        seed,
-        max_attempts_per_obstacle,
-        dtype,
-    )
+    if not isinstance(generator, torch.Generator):
+        raise TypeError("generator must be a torch.Generator")
+
+    if torch.device(generator.device).type != "cpu":
+        raise ValueError("generator must be a CPU torch.Generator")
+
+    if dtype not in _SUPPORTED_DTYPES:
+        raise TypeError(
+            "dtype must be torch.float32 or torch.float64; "
+            f"received {dtype}"
+        )
 
     try:
         destination = torch.device(device)
     except (TypeError, RuntimeError) as exc:
         raise ValueError(f"invalid device: {device!r}") from exc
-
-    # All random draws occur on CPU. No global RNG state is read or changed.
-    generator = torch.Generator(device="cpu")
-    generator.manual_seed(int(seed))
 
     centers_cpu = torch.empty((count, 2), dtype=dtype, device="cpu")
     radii_cpu = torch.empty((count,), dtype=dtype, device="cpu")
@@ -304,5 +294,76 @@ def generate_obstacle_world(
         radius_max,
     )
 
-    obstacles = CircleObstacles(centers=centers, radii=radii)
+    return CircleObstacles(centers=centers, radii=radii)
+
+
+def generate_obstacle_world(
+    config: WorldConfig,
+    *,
+    seed: int,
+    device: torch.device | str = "cpu",
+    dtype: torch.dtype = torch.float32,
+    max_attempts_per_obstacle: int = 10_000,
+) -> WorldState:
+    """Generate one seeded world containing only non-overlapping obstacles.
+
+    Args:
+        config: A canonical ``WorldConfig``. Its existing ``validate()``
+            contract is authoritative. The config is not mutated.
+        seed: Explicit nonnegative integer application seed in the inclusive
+            range [0, 2**63 - 1]. This is LAWLESS's seed policy, not a claim
+            about the full range accepted by torch.Generator.
+        device: Destination device, such as ``"cpu"`` or ``"cuda"``.
+        dtype: ``torch.float32`` or ``torch.float64`` only. Configured
+            obstacle-radius bounds are first rounded to this dtype; generated
+            radii must lie within those representable bounds.
+        max_attempts_per_obstacle: Maximum candidate placements per obstacle.
+
+    Returns:
+        A validated single-world ``WorldState``. Zero obstacles are supported.
+
+    Raises:
+        TypeError or ValueError: Invalid arguments or configuration.
+        WorldGenerationError: A requested obstacle could not be placed within
+            its finite attempt budget. No partial world is returned.
+
+    Reproducibility:
+        Random draws are made on CPU using a private ``torch.Generator``.
+        The same seed, config, dtype, and PyTorch generator implementation
+        produce the same CPU-sampled layout. Transferring the generated
+        tensors to CPU or CUDA preserves their values exactly for the
+        supported dtypes. Bitwise reproducibility across different PyTorch
+        versions is not promised.
+    """
+    width, height, count, radius_min, radius_max = _validate_inputs(
+        config,
+        seed,
+        max_attempts_per_obstacle,
+        dtype,
+    )
+
+    # Preserve the public API's validation order: validate the config,
+    # seed, budget, and dtype before validating the destination device.
+    try:
+        torch.device(device)
+    except (TypeError, RuntimeError) as exc:
+        raise ValueError(f"invalid device: {device!r}") from exc
+
+    # All random draws occur on CPU. No global RNG state is read or changed.
+    generator = torch.Generator(device="cpu")
+    generator.manual_seed(int(seed))
+
+    obstacles = _generate_obstacles_with_rng(
+        width=width,
+        height=height,
+        count=count,
+        radius_min=radius_min,
+        radius_max=radius_max,
+        seed=int(seed),
+        generator=generator,
+        device=device,
+        dtype=dtype,
+        max_attempts_per_obstacle=int(max_attempts_per_obstacle),
+    )
+
     return WorldState.from_config(config, obstacles)
