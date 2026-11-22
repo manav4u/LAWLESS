@@ -136,7 +136,10 @@ def _validate_physics_compatibility(
         old = getattr(current, name)
         new = getattr(replacement, name)
         if new.device != old.device:
-            raise ValueError(f"replacement {name} must be on {old.device}")
+            raise ValueError(
+                f"replacement {name} device must match {old.device}; "
+                f"got {new.device}"
+            )
         if new.dtype != old.dtype:
             raise ValueError(f"replacement {name} must have dtype {old.dtype}")
 
