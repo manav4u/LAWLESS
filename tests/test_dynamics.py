@@ -38,3 +38,49 @@ def test_angular_acceleration():
     command = torch.tensor([[1.0]], dtype=torch.float64)
     alpha = angular_acceleration(omega, command, cfg)
     torch.testing.assert_close(alpha, torch.tensor([[3.8]], dtype=torch.float64))
+
+
+def test_gravity_broadcasting_across_environment_batches():
+    from lawless.physics.state import make_state
+
+    cfg = PhysicsConfig(linear_damping=0.0)
+    state = make_state((3, 128), dtype=torch.float64)
+
+    throttle = torch.zeros((3, 128, 1), dtype=torch.float64)
+    gravity_shared = torch.tensor([0.0, 4.0], dtype=torch.float64)
+    gravity_env = gravity_shared.expand(3, 128, 2).clone()
+
+    acc_shared = linear_acceleration(
+        state.velocity, state.angle, throttle, gravity_shared, cfg
+    )
+    acc_expanded = linear_acceleration(
+        state.velocity, state.angle, throttle, gravity_env, cfg
+    )
+
+    torch.testing.assert_close(acc_shared, acc_expanded)
+    torch.testing.assert_close(
+        acc_shared,
+        torch.tensor([0.0, 4.0], dtype=torch.float64).expand(3, 128, 2),
+    )
+
+    # Each environment receives its own gravity vector.
+    gravity_env[0] = torch.tensor([0.0, 4.0], dtype=torch.float64)
+    gravity_env[1] = torch.tensor([4.0, 0.0], dtype=torch.float64)
+    gravity_env[2] = torch.tensor([-4.0, 0.0], dtype=torch.float64)
+
+    acc_per_env = linear_acceleration(
+        state.velocity, state.angle, throttle, gravity_env, cfg
+    )
+
+    torch.testing.assert_close(
+        acc_per_env[0],
+        torch.tensor([0.0, 4.0], dtype=torch.float64).expand(128, 2),
+    )
+    torch.testing.assert_close(
+        acc_per_env[1],
+        torch.tensor([4.0, 0.0], dtype=torch.float64).expand(128, 2),
+    )
+    torch.testing.assert_close(
+        acc_per_env[2],
+        torch.tensor([-4.0, 0.0], dtype=torch.float64).expand(128, 2),
+    )

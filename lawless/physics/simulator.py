@@ -33,8 +33,10 @@ def step(
     throttle = actions[..., 0:1]
     torque_command = actions[..., 1:2]
 
-    energy_next, has_energy = actuator_energy_step(state.energy, throttle, torque_command, config)
+    energy_next_raw, has_energy = actuator_energy_step(state.energy, throttle, torque_command, config)
     enabled = state.alive & has_energy
+    # Dead agents' energy is frozen: no further drain after death.
+    energy_next = torch.where(state.alive, energy_next_raw, state.energy)
     accel = linear_acceleration(state.velocity, state.angle, throttle, gravity, config, enabled=enabled)
     ang_accel = angular_acceleration(state.angular_velocity, torque_command, config, enabled=enabled)
 
