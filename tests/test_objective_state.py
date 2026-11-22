@@ -466,7 +466,8 @@ def test_mark_collected_empty_events_preserve_mask_and_return_empty_output(devic
 
     assert torch.equal(result.collected.cpu(), initial)
     assert newly.dtype == torch.bool
-    assert newly.device == device
+    assert result.collected.device == state.collected.device
+    assert newly.device == state.collected.device
     assert newly.shape == (0,)
     assert result.collected.data_ptr() != state.collected.data_ptr()
 

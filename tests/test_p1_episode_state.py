@@ -567,7 +567,8 @@ def test_real_generated_world_initialization_preserves_assignment_shape_and_layo
     assert state.batch_shape == (2, 2)
     assert torch.equal(state.spawn_indices, assignments)
     assert state.physics.position.dtype == dtype
-    assert state.physics.position.device == torch.device(device)
+    expected_device = layout.spawn_positions.device
+    assert state.physics.position.device == expected_device
     assert torch.equal(state.physics.position, expected_positions)
     assert state.objectives.collected.shape == (2, 2, 2)
     assert torch.equal(state.physics.energy, torch.full(
