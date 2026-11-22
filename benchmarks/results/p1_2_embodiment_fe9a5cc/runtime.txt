@@ -1,0 +1,20 @@
+Validated source commit: fe9a5cca6c57bbd3edca1ec1e375804686cd8a0a
+P0 frozen tag: d82d8e1d910285b4d95ca7a64ad71d4a2437a883
+
+Local CPU:
+Python: 3.10.12
+PyTorch: 2.14.1+cpu
+CUDA available: False
+
+Free Colab T4:
+Python: 3.13.16
+PyTorch: 2.14.1+cu130
+CUDA build: 13.0
+CUDA available: True
+GPU: Tesla T4
+VRAM (GiB): 14.56
+
+CPU P0 command: PYTHONPATH=. python benchmarks/validate_p0.py
+T4 P0 command: python benchmarks/validate_p0.py
+Full suite command: python -m pytest -q (local); python -m pytest -v (T4)
+Physics diff: git diff p0-validated -- lawless/physics (empty)

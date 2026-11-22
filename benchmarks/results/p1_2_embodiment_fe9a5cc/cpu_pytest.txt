@@ -1,0 +1,41 @@
+.....................................ss................................. [ 12%]
+..............ssss....ssss....ssss....ssss................ss............ [ 24%]
+......................................................................s. [ 36%]
+s.s.s.s.s.ss....................s....................................... [ 48%]
+........................................................................ [ 60%]
+......................................s...........s.....s...ss..ss...s.. [ 72%]
+......................................................ssss.....ss......s [ 84%]
+......................................ss...............ss............... [ 96%]
+............s....s...                                                    [100%]
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_embodiment.py:247: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:457: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:498: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:545: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:587: CUDA is not available
+SKIPPED [2] tests/test_full_generator.py:361: CUDA unavailable
+SKIPPED [1] tests/test_objective_state.py:354: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:397: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:428: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:453: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:475: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:499: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:522: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:559: CUDA is not available
+SKIPPED [1] tests/test_p1_boundaries.py:178: CUDA is not available
+SKIPPED [1] tests/test_p1_episode_state.py:78: CUDA unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:316: CUDA unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:443: CUDA unavailable
+SKIPPED [2] tests/test_p1_episode_state.py:513: CUDA unavailable
+SKIPPED [2] tests/test_p1_episode_state.py:588: CUDA unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:770: CUDA unavailable
+SKIPPED [2] tests/test_p1_generated_world.py:396: CUDA is not available
+SKIPPED [2] tests/test_p1_generated_world.py:445: CUDA is not available
+SKIPPED [2] tests/test_p1_obstacle_rng_helper.py:116: CUDA unavailable
+SKIPPED [1] tests/test_p1_obstacle_rng_helper.py:354: CUDA unavailable
+SKIPPED [2] tests/test_p1_world_generator.py:425: CUDA is not available
+SKIPPED [1] tests/test_p1_world_geometry.py:158: CUDA is not available
+SKIPPED [1] tests/test_p1_world_geometry.py:172: CUDA is not available
+SKIPPED [1] tests/test_p1_world_state.py:261: CUDA is not available
+SKIPPED [1] tests/test_simulator.py:88: CUDA unavailable
+547 passed, 50 skipped in 1.09s
