@@ -1,0 +1,257 @@
+{
+  "schema": "lawless.a22.cpu_archival_manifest.v1",
+  "archive": {
+    "path": "benchmarks/results/p1_8_a22_cpu_9b9c3b2/",
+    "source_checkpoint": "9b9c3b28a41037671b0806d234e1d728082a9b28",
+    "validation_branch": "validation/environment-benchmarks",
+    "repository_url": "https://github.com/manav4u/LAWLESS.git",
+    "automation_commit": "e832f2398444b2dc38e745c20618177088a51a46",
+    "original_run_manifest": "run_manifest.json",
+    "original_run_manifest_preserved_unchanged": true
+  },
+  "execution": {
+    "platform": "GitHub Actions hosted CPU",
+    "run_id": "45066856729",
+    "run_url": "https://github.com/manav4u/LAWLESS/actions/runs/45066856729",
+    "job_id": "137344837156",
+    "job_url": "https://github.com/manav4u/LAWLESS/actions/runs/45066856729/job/137344837156",
+    "outer_actions_artifact_id": "14772171030",
+    "outer_actions_artifact_sha256": "92ff23ea2e210cd0c4486fe6d03ada42c00d97fa9faec0a9aa4a5ec78457be4e",
+    "outer_artifact_and_inner_zip_are_distinct_layers_of_same_run": true,
+    "inner_evidence_zip": {
+      "path": "LAWLESS_A22_CPU_evidence.zip",
+      "sha256": "19f9e8cf58c619355804626bf63383a2721ddf81011a1f3ead41f4b6133389f0",
+      "size_bytes": 28070
+    },
+    "run_manifest_schema": "lawless.a22.colab_cpu_evidence_manifest.v1",
+    "legacy_naming_note": "The operational cell filename, receipt schema, and workspace prefix retain legacy Colab-oriented names from the reused operational cell. They do not describe the execution platform; all archived receipts were captured by the GitHub Actions hosted CPU run identified above.",
+    "earlier_interactive_colab_attempt": "Disconnected; no recovered receipt. It did not produce any of the archived raw files."
+  },
+  "run": {
+    "overall_status": "valid",
+    "failure": null,
+    "created_utc": "2026-11-22T20:36:48.447165+00:00",
+    "supervisor_started_utc": "2026-11-22T20:32:23.018346+00:00",
+    "runtime_before_captured_utc": "2026-11-22T20:32:25.283221+00:00",
+    "runtime_after_captured_utc": "2026-11-22T20:36:48.434883+00:00",
+    "supervisor_finished_utc": "2026-11-22T20:36:48.863514+00:00"
+  },
+  "workload": {
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "seed": 7,
+    "batch": 1,
+    "candidates": 1,
+    "episode_steps": 2400,
+    "component_profile_episodes": 1,
+    "timing_full_warmup_episodes": 1,
+    "timing_measured_full_episodes": 5
+  },
+  "runtime": {
+    "system": "Linux",
+    "release": "7.0.0-1020-azure",
+    "machine": "x86_64",
+    "logical_cpu_count_before_run": 4,
+    "python_implementation": "CPython",
+    "python_version": "3.11.18",
+    "python_build": "3.11.18 (main, Oct 26 2026, 02:48:29) [GCC 15.2.0]",
+    "torch_version": "2.15.0+cu132",
+    "torch_cuda_version": "13.2",
+    "cuda_available": false,
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "torch_num_threads": 2,
+    "torch_num_interop_threads": 4,
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "VECLIB_MAXIMUM_THREADS": null
+    }
+  },
+  "source_identity": {
+    "executed_revision": "9b9c3b28a41037671b0806d234e1d728082a9b28",
+    "historical_declared_source_revision": "ac7e0471ae314460d6f72036a33f9a2e3a198bc5",
+    "declared_revision_matches_checkout": false,
+    "interpretation": "The historical declared revision is retained as recorded. The supplied A2.1 source_identity() implementation reports this comparison as an informational field and does not use it to determine identity_status. Runtime inventory, hashes, clean-tree status, and frozen P0 comparison are the recorded identity checks.",
+    "timing_source_fingerprint_before": "e254c052685a40b387fc00df1952a77d0c2dff0c5b0f8317b50a40746c58f972",
+    "timing_source_fingerprint_after": "e254c052685a40b387fc00df1952a77d0c2dff0c5b0f8317b50a40746c58f972",
+    "tracked_python_files": 79,
+    "untracked_python_files": 0,
+    "working_tree": "clean",
+    "frozen_p0_comparison": "20/20 preserved",
+    "profile_source_before_after_full_identity_equality": {
+      "result": "verified",
+      "kind": "derived_validation",
+      "note": "The profile receipt source_before and source_after full identity records were compared and found equal. The profile receipt does not contain profile_source_fingerprint_before or profile_source_fingerprint_after fields."
+    },
+    "profile_source_identity_status": "verified",
+    "timing_source_identity_status": "verified"
+  },
+  "operational_cell": {
+    "filename": "scripts/lawless_p18_a22_colab_cell_candidate.py",
+    "expected_sha256": "5c34a9f3fc7d4d0f8463a3dbc70e37544776fd4d44aecfe18f542b53231bee51",
+    "actual_sha256": "5c34a9f3fc7d4d0f8463a3dbc70e37544776fd4d44aecfe18f542b53231bee51",
+    "runtime_cell_sha256_after_observability_patches": "2b25fb888a03828c40dae907c08964be5c7e5a2fe577fc966c5c8498122406d8",
+    "expected_matches_actual": true
+  },
+  "supervisor": {
+    "schema": "lawless.a22.cpu_supervisor_status.v1",
+    "status": "cell_completed",
+    "cell_exit_code": 0,
+    "error": null,
+    "timed_out": false,
+    "timeout_seconds": 3600,
+    "started_utc": "2026-11-22T20:32:23.018346+00:00",
+    "finished_utc": "2026-11-22T20:36:48.863514+00:00",
+    "observability_patches": [
+      "insert temporary stage logger",
+      "add 300-second timeout to cell run_command",
+      "log clone and pin start",
+      "log clone and pin completion",
+      "log runtime capture start",
+      "log runtime capture completion and frozen preflight start",
+      "log frozen source preflight completion",
+      "log component profile start",
+      "log component profile return",
+      "log uninstrumented timing start",
+      "log uninstrumented timing return",
+      "log timing receipt validation completion",
+      "log cell exception capture",
+      "log evidence finalization start",
+      "log evidence packaging start"
+    ]
+  },
+  "raw_evidence_files": [
+    {
+      "path": "a22_cpu_component_profile.json",
+      "role": "component-profile receipt",
+      "sha256": "118940bab131c73bc1e529d361ae7e1de8e4a38e3ab00408dd319b471001d61b",
+      "size_bytes": 54963,
+      "preserve_bytes_unchanged": true
+    },
+    {
+      "path": "a22_cpu_uninstrumented_timing.json",
+      "role": "uninstrumented timing receipt",
+      "sha256": "e38f5260839373410dbd31aee4684a0007f08b24bc96045c223427b161a23cd3",
+      "size_bytes": 348815,
+      "preserve_bytes_unchanged": true
+    },
+    {
+      "path": "run_manifest.json",
+      "role": "original run manifest",
+      "sha256": "ff5ce71a05b1828d1032086cb2654cce0f00c298e711335c19af9d90948004c1",
+      "size_bytes": 4105,
+      "preserve_bytes_unchanged": true
+    },
+    {
+      "path": "LAWLESS_A22_CPU_evidence.zip",
+      "role": "inner supervisor-captured evidence ZIP",
+      "sha256": "19f9e8cf58c619355804626bf63383a2721ddf81011a1f3ead41f4b6133389f0",
+      "size_bytes": 28070,
+      "preserve_bytes_unchanged": true
+    }
+  ],
+  "profile_summary": {
+    "schema": "lawless.a22.component_profile.v2",
+    "status": "valid",
+    "accepted_profile": true,
+    "component_intervals_seconds": {
+      "assemble_observations": 1.476805489,
+      "physics": 0.348655333,
+      "resolve_static_obstacles": 28.054202243,
+      "sense_lidar": 1.056850940999999
+    },
+    "controller_and_public_step_loop_seconds": 37.445222613,
+    "public_step_inclusive_seconds": 37.15986847199994,
+    "public_step_calls_returned": 2400,
+    "public_step_calls_attempted": 2400,
+    "reset_seconds": 0.007072278,
+    "timing_method": "perf_counter_ns",
+    "component_interval_semantics": "Inclusive, nested wall-clock wrapper intervals. Do not sum component intervals. Wrapper dispatch and clock-read overhead are included and not separately quantified or subtracted.",
+    "instrumented_not_uninstrumented_baseline": true,
+    "restoration_status": "verified",
+    "restoration_errors": 0,
+    "restored_callable_identity_checks": [
+      "a21_step",
+      "assemble_observations",
+      "module_step",
+      "physics_step",
+      "resolve_static_obstacles",
+      "sense_lidar"
+    ],
+    "source_before_after_full_identity_equality": "verified_derived_validation",
+    "profile_source_fingerprint_fields_present": false
+  },
+  "timing_summary": {
+    "schema": "lawless.a22.cpu_timing_receipt",
+    "status": "valid",
+    "warmup_episode_seconds": 37.28541197100003,
+    "warmup_episodes": 1,
+    "measured_episodes": 5,
+    "episode_steps": 2400,
+    "measured_episode_seconds": [
+      37.481794820000005,
+      37.45022661600001,
+      37.65125348799984,
+      37.479102294000086,
+      37.56692981499987
+    ],
+    "median_episode_seconds": 37.481794820000005,
+    "spread_max_minus_min_seconds": 0.20102687199982938,
+    "median_world_steps_per_second": 64.03108526487578,
+    "rate_scope": "B1/N1, seed-7 CPU float32 workload only; no throughput extrapolation or scaling claim."
+  },
+  "validation_observations": {
+    "transitions_attempted_per_measured_episode": 2400,
+    "public_step_calls_returned_per_measured_episode": 2400,
+    "world_steps_per_measured_episode": 2400,
+    "world_completed": true,
+    "observation_shape": [
+      1,
+      1,
+      23
+    ],
+    "observation_device": "cpu",
+    "observation_dtype": "torch.float32",
+    "observations_finite": true,
+    "physical_state_finite": true,
+    "final_gravity": [
+      [
+        -0.0,
+        4.0
+      ]
+    ],
+    "final_inventory": {
+      "extracted": [
+        0
+      ],
+      "failed": [
+        0
+      ],
+      "physical_alive": [
+        1
+      ],
+      "truncated": [
+        1
+      ]
+    },
+    "geometry_unchanged": true,
+    "geometry": {
+      "body_radius": 0.5,
+      "core_count": 8,
+      "extraction_radius": 3,
+      "obstacle_count": 20,
+      "spawn_count": 1
+    }
+  },
+  "scope_limits": [
+    "No production, A2.1, or frozen P0 source edits",
+    "Component profile is instrumented and is not an uninstrumented baseline",
+    "Component intervals are inclusive and nested; do not sum them",
+    "Timing consists of one full warmup and five full measured episodes",
+    "No throughput extrapolation or scaling claim",
+    "No main merge, P1.8-A acceptance, or P6 release claim"
+  ]
+}

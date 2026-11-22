@@ -1,0 +1,116 @@
+{
+  "created_utc": "2026-11-22T20:36:48.447165+00:00",
+  "failure": null,
+  "final_tree_status": "",
+  "git_head": "9b9c3b28a41037671b0806d234e1d728082a9b28",
+  "initial_tree_status": "",
+  "overall_status": "valid",
+  "profile_receipt_file": "a22_cpu_component_profile.json",
+  "profile_receipt_sha256": "118940bab131c73bc1e529d361ae7e1de8e4a38e3ab00408dd319b471001d61b",
+  "remote_url": "https://github.com/manav4u/LAWLESS.git",
+  "repository_url": "https://github.com/manav4u/LAWLESS.git",
+  "runtime_after": {
+    "captured_utc": "2026-11-22T20:36:48.434883+00:00",
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "VECLIB_MAXIMUM_THREADS": null
+    },
+    "timing_runner_runtime": {
+      "cuda_available": false,
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "machine": "x86_64",
+      "processor": "",
+      "python": "3.11.18 (main, Oct 26 2026, 02:48:29) [GCC 15.2.0]",
+      "python_implementation": "CPython",
+      "python_version": "3.11.18",
+      "release": "7.0.0-1020-azure",
+      "system": "Linux",
+      "thread_environment": {
+        "MKL_NUM_THREADS": null,
+        "NUMEXPR_NUM_THREADS": null,
+        "OMP_NUM_THREADS": null,
+        "OPENBLAS_NUM_THREADS": null,
+        "VECLIB_MAXIMUM_THREADS": null
+      },
+      "timestamp_utc": "2026-11-22T20:36:48.434974+00:00",
+      "torch_cuda_version": "13.2",
+      "torch_num_interop_threads": 4,
+      "torch_num_threads": 2,
+      "torch_version": "2.15.0+cu132"
+    },
+    "torch_num_interop_threads": 4,
+    "torch_num_threads": 2
+  },
+  "runtime_before": {
+    "captured_utc": "2026-11-22T20:32:25.283221+00:00",
+    "logical_cpu_count": 4,
+    "machine": "x86_64",
+    "platform": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
+    "processor": "",
+    "python_implementation": "CPython",
+    "python_version": "3.11.18",
+    "thread_environment": {
+      "MKL_NUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "VECLIB_MAXIMUM_THREADS": null
+    },
+    "timing_runner_runtime": {
+      "cuda_available": false,
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "machine": "x86_64",
+      "processor": "",
+      "python": "3.11.18 (main, Oct 26 2026, 02:48:29) [GCC 15.2.0]",
+      "python_implementation": "CPython",
+      "python_version": "3.11.18",
+      "release": "7.0.0-1020-azure",
+      "system": "Linux",
+      "thread_environment": {
+        "MKL_NUM_THREADS": null,
+        "NUMEXPR_NUM_THREADS": null,
+        "OMP_NUM_THREADS": null,
+        "OPENBLAS_NUM_THREADS": null,
+        "VECLIB_MAXIMUM_THREADS": null
+      },
+      "timestamp_utc": "2026-11-22T20:32:25.286486+00:00",
+      "torch_cuda_version": "13.2",
+      "torch_num_interop_threads": 4,
+      "torch_num_threads": 2,
+      "torch_version": "2.15.0+cu132"
+    },
+    "torch_cuda_available": false,
+    "torch_num_interop_threads": 4,
+    "torch_num_threads": 2,
+    "torch_version": "2.15.0+cu132"
+  },
+  "schema": "lawless.a22.colab_cpu_evidence_manifest.v1",
+  "scope_limits": [
+    "No production, A2.1, or frozen P0 source edits",
+    "Component profile is instrumented and is not an uninstrumented baseline",
+    "Component intervals are inclusive and nested; do not sum them",
+    "Timing consists of one full warmup and five full measured episodes",
+    "No throughput extrapolation or scaling claim",
+    "No main merge, P1.8-A acceptance, or P6 release claim"
+  ],
+  "source_checkpoint": "9b9c3b28a41037671b0806d234e1d728082a9b28",
+  "timing_receipt_file": "a22_cpu_uninstrumented_timing.json",
+  "timing_receipt_sha256": "e38f5260839373410dbd31aee4684a0007f08b24bc96045c223427b161a23cd3",
+  "validation_branch": "validation/environment-benchmarks",
+  "workload": {
+    "batch": 1,
+    "candidates": 1,
+    "component_profile_episodes": 1,
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "episode_steps": 2400,
+    "seed": 7,
+    "timing_full_warmup_episodes": 1,
+    "timing_measured_full_episodes": 5
+  }
+}
