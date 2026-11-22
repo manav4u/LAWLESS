@@ -1,0 +1,37 @@
+simulation:
+  timestep: 0.0166666666666667
+  episode_duration: 40.0
+  shift_time: 20.0
+  integration: semi_implicit_euler
+
+world:
+  coordinate_system: cartesian_y_up
+  gravity_magnitude: 4.0
+  gravity_directions:
+    - [0.0, 1.0]
+    - [1.0, 0.0]
+    - [0.0, -1.0]
+    - [-1.0, 0.0]
+
+agent:
+  mass: 1.0
+  moment_of_inertia: 0.5
+  actuator:
+    max_thrust: 12.0
+    max_torque: 2.0
+  damping:
+    linear: 0.15
+    angular: 0.20
+  energy:
+    initial: 100.0
+    maximum: 100.0
+    thrust_power: 1.5
+    torque_power: 0.5
+
+numerics:
+  dtype: float32
+  angle_min: -3.141592653589793
+  angle_max: 3.141592653589793
+
+evaluation:
+  seed: 42
