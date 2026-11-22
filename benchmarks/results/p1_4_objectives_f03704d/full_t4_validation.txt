@@ -1,0 +1,41 @@
+VALIDATED_HEAD: f03704d58500de041bbfad7403bb315878110052
+RUNTIME: {"python": "3.13.16", "torch": "2.14.1+cu130", "cuda": "13.0", "gpu": "Tesla T4", "vram_gib": 14.56}
+FULL_PYTEST_BEGIN
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 37%]
+........................................................................ [ 46%]
+........................................................................ [ 55%]
+........................................................................ [ 65%]
+........................................................................ [ 74%]
+........................................................................ [ 83%]
+........................................................................ [ 93%]
+.....................................................                    [100%]
+=============================== warnings summary ===============================
+tests/test_p13_collision.py: 17 warnings
+  /content/LAWLESS/tests/test_p13_collision.py:26: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    centers=torch.tensor(centers, dtype=dtype).reshape(-1, 2),
+
+tests/test_p13_collision.py: 17 warnings
+  /content/LAWLESS/tests/test_p13_collision.py:27: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    radii=torch.tensor(radii, dtype=dtype).reshape(-1),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+773 passed, 34 warnings in 8.43s
+
+
+FULL_PYTEST_RETURN_CODE: 0
+P0_VALIDATOR_BEGIN
+position max_abs_deviation: 0.0001220703125
+velocity max_abs_deviation: 3.814697265625e-06
+angle max_abs_deviation: 0.0
+angular_velocity max_abs_deviation: 0.0
+energy max_abs_deviation: 0.0
+P0 validation: 2400 steps, 40.0 seconds
+
+
+P0_VALIDATOR_RETURN_CODE: 0
+FINAL_RUNTIME: 3.13.16 2.14.1+cu130 13.0 Tesla T4
+FINAL_HEAD: f03704d58500de041bbfad7403bb315878110052
+P14_VALIDATION_COMPLETE: f03704d58500de041bbfad7403bb315878110052

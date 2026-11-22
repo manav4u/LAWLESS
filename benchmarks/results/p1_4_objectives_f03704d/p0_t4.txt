@@ -1,0 +1,6 @@
+position max_abs_deviation: 0.0001220703125
+velocity max_abs_deviation: 3.814697265625e-06
+angle max_abs_deviation: 0.0
+angular_velocity max_abs_deviation: 0.0
+energy max_abs_deviation: 0.0
+P0 validation: 2400 steps, 40.0 seconds
