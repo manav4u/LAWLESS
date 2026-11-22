@@ -2,18 +2,27 @@
 
 ## Status
 
-P1.5 eight-ray lidar source validation is complete at exact source commit
-`3bd77e057e46f8026abd422baf034332261975bf` on `validation/lidar`.
+P1.5 eight-ray lidar source validation is complete at exact source
+commit `3bd77e057e46f8026abd422baf034332261975bf` on `validation/lidar`.
 
-This is the tested source revision. The evidence below records the actual
-CPU, Tesla T4, P0 validator, and source-CI results for that revision.
-A documentation-only successor and fast-forward integration into `main`
-are planned separately. No successor or integrated-main CI success is
-claimed here.
+The exact tested source revision passed the focused CPU suite
+(97 passed, 63 genuine CUDA skips), full CPU suite
+(814 passed, 119 genuine CUDA skips, zero failures), and full free
+Tesla T4 suite (933 passed, zero skips, zero failures). The P0
+validator passed 2,400 steps over 40 seconds on both CPU and T4.
+The full-suite runs each reported 34 unchanged prior collision-fixture
+warnings.
 
-P1.5 implements the eight-ray lidar sensor only. It does not implement
-observation assembly, episode stepping, controllers, optimization,
-training, or evolution.
+A documentation-only successor,
+`a8ae378be04cea981819f82d4f7610d5f603baa9`, was subsequently pushed
+to `validation/lidar` and fast-forwarded to `main`. Its branch CI and
+the CI for the integrated `main` both passed, as recorded below.
+The successor changes documentation only; its product source, tests,
+and validator remain identical to the T4-tested P1.5 source commit.
+
+This evidence records P1.5 validation and its completed integration.
+It does not claim overall project completion or authorize a later
+research release.
 
 ## Scope and source provenance
 
@@ -168,10 +177,19 @@ The CI run for the exact P1.5 source revision completed successfully:
 - [Source CI run 45028568460](https://github.com/manav4u/LAWLESS/actions/runs/45028568460)
 - Pytest job 137226880572: completed successfully.
 
-Source CI is evidence for the tested source commit. It is distinct
-from CI for a later documentation-only successor and from CI for
-integrated `main`. Those later checks are not claimed as successful
-in this evidence record.
+The P1.5 source commit `3bd77e057e46f8026abd422baf034332261975bf`
+passed source CI ([run 45028568460](https://github.com/manav4u/LAWLESS/actions/runs/45028568460)).
+After the documentation-only successor
+`a8ae378be04cea981819f82d4f7610d5f603baa9` was pushed to
+`validation/lidar`, its CI completed successfully
+([run 45030148306](https://github.com/manav4u/LAWLESS/actions/runs/45030148306)).
+Following the fast-forward of `main` to that same exact revision,
+integrated-main CI also completed successfully
+([run 45030366342](https://github.com/manav4u/LAWLESS/actions/runs/45030366342);
+[pytest job 137232422975](https://github.com/manav4u/LAWLESS/actions/runs/45030366342/job/137232422975)).
+These are historical CI results for their respective exact commits.
+They do not assert CI success for any subsequent documentation-only
+receipt commit.
 
 ## Raw execution evidence
 
@@ -251,21 +269,23 @@ made by this validation.
 
 ## Integration and release boundary
 
-The next planned repository operation is a documentation-only
-successor containing this evidence README and the corresponding root
-README status update. It is intended to record the exact tested source
-revision and its raw evidence without changing product source, tests,
-or validators.
+The documentation-only successor
+`a8ae378be04cea981819f82d4f7610d5f603baa9` was pushed to
+`validation/lidar`; its CI completed successfully. `main` was then
+fast-forwarded to the same exact commit, and integrated-main CI,
+including its pytest job, completed successfully. The live branch
+refs were verified at that hash.
 
-After that documentation-only commit, the planned operation is a
-fast-forward integration of `main`, followed by separate checks of
-the documentation-only successor CI and integrated-main CI.
-
-Neither operation nor its CI result is asserted as complete here.
+The successor contains documentation and evidence only. Its product
+source, tests, and validator are identical to the P1.5 source revision
+`3bd77e057e46f8026abd422baf034332261975bf` validated on the Tesla T4.
+No additional product, test, or validator changes are represented.
 
 The frozen P0 tag remains unchanged at
 `d82d8e1d910285b4d95ca7a64ad71d4a2437a883`.
 
-This evidence records P1.5 source validation only. It does not
-authorize paid compute, a P6 research release, or any release without
-the project owner's required preview and approval.
+No GPU session remains active, and credentials were cleaned after
+validation. This integration does not authorize paid compute or a
+P6 research release. Any later release remains subject to the
+project owner's preview and approval. P1.6-P1.8, controllers,
+optimization, training, and evolution remain incomplete.
