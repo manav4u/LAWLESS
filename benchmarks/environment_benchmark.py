@@ -1361,3 +1361,812 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+A21_EPISODE_STEPS = 2400
+A21_GRAVITY_SHIFT_STEP = 1200
+A21_EPISODE_DURATION_S = 40.0
+A21_SHIFT_TIME_S = 20.0
+A21_DT_S = 1.0 / 60.0
+A21_GRAVITY_M_S2 = 4.0
+
+
+def create_a21_config(seed: int) -> EnvironmentConfig:
+    """Create the locked, full-duration A2.1 stress configuration."""
+    validate_seed_span(seed, 1)
+
+    config = create_config(seed)
+    config.validate()
+
+    episode = config.episode
+    expected = (
+        ("episode_duration_s", episode.episode_duration_s,
+         A21_EPISODE_DURATION_S),
+        ("shift_time_s", episode.shift_time_s, A21_SHIFT_TIME_S),
+        ("dt_s", episode.dt_s, A21_DT_S),
+        ("gravity_m_s2", episode.gravity_m_s2, A21_GRAVITY_M_S2),
+    )
+
+    for name, actual, required in expected:
+        if not math.isclose(
+            float(actual), required, rel_tol=0.0, abs_tol=1e-12
+        ):
+            raise ValueError(
+                f"A2.1 requires episode.{name}={required!r}; "
+                f"received {actual!r}"
+            )
+
+    steps = int(round(
+        episode.episode_duration_s / episode.dt_s
+    ))
+    shift_step = int(round(
+        episode.shift_time_s / episode.dt_s
+    ))
+
+    if steps != A21_EPISODE_STEPS:
+        raise ValueError(
+            f"A2.1 requires exactly {A21_EPISODE_STEPS} episode steps"
+        )
+
+    if shift_step != A21_GRAVITY_SHIFT_STEP:
+        raise ValueError(
+            "A2.1 requires the gravity shift at transition "
+            f"{A21_GRAVITY_SHIFT_STEP}"
+        )
+
+    return config
+
+
+def validate_a21_geometry(
+    inventory: list[dict[str, Any]],
+    batch: int,
+) -> None:
+    """Reject empty or incomplete generated-world geometry."""
+    if len(inventory) != batch:
+        raise ValueError(
+            f"A2.1 expected geometry for {batch} worlds; "
+            f"received {len(inventory)}"
+        )
+
+    for index, item in enumerate(inventory):
+        if item["obstacle_count"] <= 0:
+            raise ValueError(
+                f"A2.1 world {index} has no static obstacles"
+            )
+        if item["core_count"] <= 0:
+            raise ValueError(
+                f"A2.1 world {index} has no objective cores"
+            )
+        if item["spawn_count"] <= 0:
+            raise ValueError(
+                f"A2.1 world {index} has no spawn positions"
+            )
+        if item["extraction_radius_m"] <= 0:
+            raise ValueError(
+                f"A2.1 world {index} has invalid extraction radius"
+            )
+        if item["agent_body_radius_m"] <= 0:
+            raise ValueError(
+                f"A2.1 world {index} has invalid agent body radius"
+            )
+
+
+def a21_gravity_snapshot(environment: Any) -> list[list[float]]:
+    """Return one representative gravity vector per world."""
+    result = []
+
+    for index, world in enumerate(environment.worlds):
+        gravity = world.gravity.detach()
+        if gravity.numel() < 2 or gravity.shape[-1] != 2:
+            raise ValueError(
+                f"A2.1 world {index} has malformed gravity state"
+            )
+
+        vector = gravity.reshape(-1, 2)[0]
+        if not bool(torch.isfinite(vector).all().item()):
+            raise ValueError(
+                f"A2.1 world {index} has non-finite gravity"
+            )
+
+        magnitude = float(torch.linalg.vector_norm(vector).item())
+        if magnitude <= 0:
+            raise ValueError(
+                f"A2.1 world {index} has zero applied gravity"
+            )
+
+        result.append(vector.cpu().tolist())
+
+    return result
+
+
+def a21_controller_actions(
+    environment: Any,
+    target_positions: torch.Tensor,
+) -> torch.Tensor:
+    """Return bounded feedback actions for the A2.1 hold-position policy.
+
+    The controller counteracts each world's actual gravity and damps
+    position and velocity error relative to each candidate's reset
+    position. Heading is controlled with the production torque channel.
+
+    This policy is benchmark-only. It does not modify physical state.
+    """
+    if target_positions.ndim != 3 or target_positions.shape[-1] != 2:
+        raise ValueError(
+            "A2.1 target_positions must have shape [B, N, 2]"
+        )
+
+    positions = torch.stack(
+        [
+            world.episode.physics.position
+            for world in environment.worlds
+        ],
+        dim=0,
+    )
+    velocities = torch.stack(
+        [
+            world.episode.physics.velocity
+            for world in environment.worlds
+        ],
+        dim=0,
+    )
+    angles = torch.stack(
+        [
+            world.episode.physics.angle
+            for world in environment.worlds
+        ],
+        dim=0,
+    )
+    angular_velocities = torch.stack(
+        [
+            world.episode.physics.angular_velocity
+            for world in environment.worlds
+        ],
+        dim=0,
+    )
+    alive = torch.stack(
+        [
+            world.episode.physics.alive
+            for world in environment.worlds
+        ],
+        dim=0,
+    )
+
+    if positions.shape != target_positions.shape:
+        raise ValueError(
+            "A2.1 target_positions shape does not match physics state: "
+            f"{tuple(target_positions.shape)} != {tuple(positions.shape)}"
+        )
+
+    gravity = torch.stack(
+        [world.gravity for world in environment.worlds],
+        dim=0,
+    ).unsqueeze(1)
+
+    damping = torch.tensor(
+        [
+            world.physics_config.linear_damping
+            for world in environment.worlds
+        ],
+        device=positions.device,
+        dtype=positions.dtype,
+    ).reshape(-1, 1, 1)
+
+    # Desired net acceleration is a damped proportional hold-position
+    # controller. Convert it into the thrust acceleration required by
+    # the actual production equation:
+    #
+    #   acceleration = thrust + gravity - damping * velocity
+    #
+    # Therefore:
+    #
+    #   thrust = desired_acceleration - gravity + damping * velocity
+    position_error = positions - target_positions
+
+    desired_net_acceleration = (
+        -0.50 * position_error
+        -1.50 * velocities
+    )
+
+    desired_thrust = (
+        desired_net_acceleration
+        - gravity
+        + damping * velocities
+    )
+
+    desired_angle = torch.atan2(
+        desired_thrust[..., 1:2],
+        desired_thrust[..., 0:1],
+    )
+
+    angle_error = torch.atan2(
+        torch.sin(desired_angle - angles),
+        torch.cos(desired_angle - angles),
+    )
+
+    # PhysicsConfig gives max_torque / inertia = 4 rad/s^2 for
+    # the locked configuration. This bounded PD command damps angular
+    # motion while aligning the thrust direction.
+    torque_command = (
+        4.0 * angle_error
+        - 3.0 * angular_velocities
+    ) / 4.0
+
+    torque_command = torque_command.clamp(-1.0, 1.0)
+
+    thrust_magnitude = torch.linalg.vector_norm(
+        desired_thrust,
+        dim=-1,
+        keepdim=True,
+    )
+
+    max_thrust_acceleration = torch.tensor(
+        [
+            world.physics_config.max_thrust
+            / world.physics_config.mass
+            for world in environment.worlds
+        ],
+        device=positions.device,
+        dtype=positions.dtype,
+    ).reshape(-1, 1, 1)
+
+    throttle = (
+        thrust_magnitude / max_thrust_acceleration
+    ).clamp(0.0, 1.0)
+
+    # A physically inactive candidate receives no actuator command.
+    throttle = throttle * alive.to(dtype=throttle.dtype)
+    torque_command = torque_command * alive.to(
+        dtype=torque_command.dtype
+    )
+
+    return torch.cat(
+        (throttle, torque_command),
+        dim=-1,
+    )
+
+
+def a21_validate_shift_transition(
+    info: dict[str, Any],
+    environment: Any,
+    transition: int,
+) -> dict[str, Any] | None:
+    """Validate the one-time shift, its configured rotation, and installed state.
+
+    The event check is deliberately first. This preserves the focused
+    missing-event test, which supplies only the event flag. The unchanged
+    vector check also precedes the additional state/time checks, preserving
+    the focused ineffective-shift test.
+    """
+    shift_flags = info["shift_applied_this_step"].detach().cpu().bool().reshape(-1)
+    expected_shift = transition == A21_GRAVITY_SHIFT_STEP
+    observed_any = bool(shift_flags.any().item())
+
+    if observed_any != expected_shift:
+        raise RuntimeError(
+            "A2.1 gravity-shift event did not match the expected "
+            f"transition {A21_GRAVITY_SHIFT_STEP}; observed at {transition}"
+        )
+
+    if not expected_shift:
+        return None
+
+    if not bool(shift_flags.all().item()):
+        raise RuntimeError(
+            "A2.1 gravity shift was not applied in every world"
+        )
+
+    world_count = len(environment.worlds)
+    if shift_flags.numel() != world_count:
+        raise RuntimeError(
+            "A2.1 gravity-shift event flags do not match the world count"
+        )
+
+    used = info["gravity_used"].detach()
+    following = info["gravity_next"].detach()
+
+    if used.shape != following.shape:
+        raise RuntimeError(
+            "A2.1 gravity_used/gravity_next shapes differ"
+        )
+    if used.shape != (world_count, 2):
+        raise RuntimeError(
+            "A2.1 gravity vectors do not have shape (worlds, 2)"
+        )
+    if not bool(torch.isfinite(used).all().item()):
+        raise RuntimeError(
+            "A2.1 gravity_used contains non-finite values"
+        )
+    if not bool(torch.isfinite(following).all().item()):
+        raise RuntimeError(
+            "A2.1 gravity_next contains non-finite values"
+        )
+
+    used_norm = torch.linalg.vector_norm(used, dim=-1)
+    following_norm = torch.linalg.vector_norm(following, dim=-1)
+
+    if not bool((used_norm > 1e-8).all().item()):
+        raise RuntimeError(
+            "A2.1 gravity before shift is not nonzero"
+        )
+
+    if not torch.allclose(
+        used_norm,
+        following_norm,
+        rtol=1e-5,
+        atol=1e-6,
+    ):
+        raise RuntimeError(
+            "A2.1 gravity shift did not preserve magnitude"
+        )
+
+    delta = torch.linalg.vector_norm(following - used, dim=-1)
+    if not bool((delta > 1e-6).all().item()):
+        raise RuntimeError(
+            "A2.1 configured gravity shift did not change "
+            "the applied gravity vector in every world"
+        )
+
+    # Validate the configured signed 90-degree rotation for each world.
+    expected_rows = []
+    for index, world in enumerate(environment.worlds):
+        direction = world.shift_direction
+        if direction not in (-1, 1):
+            raise RuntimeError(
+                f"A2.1 world {index} has invalid shift_direction {direction!r}"
+            )
+
+        gx, gy = used[index, 0], used[index, 1]
+        expected_rows.append(
+            torch.stack((-direction * gy, direction * gx))
+        )
+
+    expected_following = torch.stack(expected_rows)
+    if not torch.allclose(
+        following,
+        expected_following,
+        rtol=1e-5,
+        atol=1e-6,
+    ):
+        raise RuntimeError(
+            "A2.1 gravity_next is not the configured signed 90-degree rotation"
+        )
+
+    # Retain compatibility with the limited ineffective-shift unit input,
+    # while validating these fields whenever the production info supplies them.
+    if "elapsed_steps" in info:
+        elapsed_steps = info["elapsed_steps"].detach().cpu().reshape(-1)
+        if elapsed_steps.numel() != world_count or not bool(
+            (elapsed_steps == A21_GRAVITY_SHIFT_STEP).all().item()
+        ):
+            raise RuntimeError(
+                "A2.1 reported elapsed steps disagree with the shift transition"
+            )
+
+    elapsed_time_values = info["elapsed_time_s"].detach().cpu().reshape(-1)
+    if elapsed_time_values.numel() != world_count or not bool(
+        torch.isfinite(elapsed_time_values).all().item()
+    ):
+        raise RuntimeError(
+            "A2.1 reported elapsed time is invalid at the gravity shift"
+        )
+    if not torch.allclose(
+        elapsed_time_values.to(dtype=torch.float64),
+        torch.full(
+            (world_count,),
+            A21_SHIFT_TIME_S,
+            dtype=torch.float64,
+        ),
+        rtol=0.0,
+        atol=1e-8,
+    ):
+        raise RuntimeError(
+            "A2.1 reported elapsed time does not match the 20-second shift"
+        )
+
+    # Verify both the persistent production report and the actual dataclass
+    # state. A true info flag alone is not evidence that the state was updated.
+    persistent = info["shift_applied"].detach().cpu().bool().reshape(-1)
+    if persistent.numel() != world_count or not bool(persistent.all().item()):
+        raise RuntimeError(
+            "A2.1 persistent shift_applied info state is false or malformed"
+        )
+
+    actual_persistent = [bool(world.shift_applied) for world in environment.worlds]
+    if actual_persistent != [True] * world_count:
+        raise RuntimeError(
+            "A2.1 actual world shift_applied state does not match the report"
+        )
+
+    actual_steps = [int(world.step_count) for world in environment.worlds]
+    if actual_steps != [A21_GRAVITY_SHIFT_STEP] * world_count:
+        raise RuntimeError(
+            "A2.1 actual world step counters do not match the shift transition"
+        )
+
+    post_shift_gravity = a21_gravity_snapshot(environment)
+    installed = torch.stack(
+        [
+            world.gravity.detach().to(
+                device=following.device,
+                dtype=following.dtype,
+            )
+            for world in environment.worlds
+        ],
+        dim=0,
+    )
+
+    if not torch.allclose(
+        installed,
+        following,
+        rtol=1e-5,
+        atol=1e-6,
+    ):
+        raise RuntimeError(
+            "A2.1 reported gravity_next was not installed in the returned "
+            "environment state"
+        )
+
+    return {
+        "transition": transition,
+        "elapsed_time_s": float(elapsed_time_values[0].item()),
+        "shift_event_per_world": shift_flags.to(dtype=torch.int64).tolist(),
+        "gravity_used_first_world": (
+            used[0].reshape(-1, 2)[0].detach().cpu().tolist()
+        ),
+        "gravity_next_first_world": (
+            following[0].reshape(-1, 2)[0].detach().cpu().tolist()
+        ),
+        "post_shift_world_gravity_vectors": post_shift_gravity,
+        "persistent_shift_applied_per_world": persistent.tolist(),
+        "actual_world_shift_applied_per_world": actual_persistent,
+        "actual_world_step_counts": actual_steps,
+        "shift_direction_per_world": [
+            int(world.shift_direction) for world in environment.worlds
+        ],
+    }
+
+def execute_a21_stress_fixture(
+    *,
+    root: Path,
+    batch: int,
+    candidates: int,
+    seed: int,
+    device: torch.device,
+    dtype: torch.dtype,
+    output_path: Path,
+) -> dict[str, Any]:
+    """Run the real 2,400-transition A2.1 CPU stress fixture.
+
+    This is a correctness/stress fixture, not a timing benchmark.
+    It intentionally has no wall-time cutoff and records no throughput
+    or per-step timing claims.
+    """
+    validate_positive_integer(batch, "batch")
+    validate_positive_integer(candidates, "candidates")
+    validate_seed_span(seed, 1)
+    validate_device(device)
+
+    if device.type != "cpu":
+        raise ValueError("A2.1 stress fixture is CPU-only")
+
+    config = create_a21_config(seed)
+
+    run: dict[str, Any] = {
+        "protocol": "P1.8-A2.1",
+        "status": "running",
+        "scope": "controlled_full_episode_cpu_stress_correctness",
+        "started_utc": utc_now(),
+        "seed_requested": seed,
+        "root_seed_applied": config.seed,
+        "batch": batch,
+        "candidates_per_world": candidates,
+        "initialized_slots": batch * candidates,
+        "device": str(device),
+        "dtype": str(dtype),
+        "episode_duration_s": A21_EPISODE_DURATION_S,
+        "dt_s": A21_DT_S,
+        "gravity_m_s2": A21_GRAVITY_M_S2,
+        "gravity_shift_time_s": A21_SHIFT_TIME_S,
+        "expected_world_transitions_per_world": A21_EPISODE_STEPS,
+        "expected_gravity_shift_transition": A21_GRAVITY_SHIFT_STEP,
+        "config": config_json(config),
+        "source_identity": source_identity(root),
+        "reset_wall_seconds": None,
+        "initial_geometry_inventory": None,
+        "final_geometry_inventory": None,
+        "initial_gravity_vectors": None,
+        "gravity_shift_observation": None,
+        "observation_shape": None,
+        "accounting": empty_accounting(batch, candidates),
+        "final_inventory": None,
+        "geometry_validation_scope": "every successfully returned transition",
+        "geometry_validation_checks": 0,
+        "geometry_world_validation_checks": 0,
+        "geometry_last_checked_transition": 0,
+        "geometry_validation_complete": False,
+    }
+
+    environment = None
+    accounting = run["accounting"]
+
+    try:
+        reset_start = time.perf_counter()
+        environment, observations, reset_info = reset(
+            config,
+            batch,
+            candidates,
+            device=device,
+            dtype=dtype,
+        )
+        run["reset_wall_seconds"] = time.perf_counter() - reset_start
+
+        run["reset_info"] = json_safe(reset_info)
+        run["actual_world_seeds"] = per_world_seeds(environment)
+
+        initial_geometry = geometry_inventory(environment)
+        validate_a21_geometry(initial_geometry, batch)
+        run["initial_geometry_inventory"] = initial_geometry
+
+        initial_gravity = a21_gravity_snapshot(environment)
+        run["initial_gravity_vectors"] = initial_gravity
+
+        for index, vector in enumerate(initial_gravity):
+            magnitude = math.hypot(vector[0], vector[1])
+            if not math.isclose(
+                magnitude,
+                A21_GRAVITY_M_S2,
+                rel_tol=1e-5,
+                abs_tol=1e-5,
+            ):
+                raise RuntimeError(
+                    f"A2.1 world {index} initial gravity magnitude "
+                    f"{magnitude!r} does not match "
+                    f"{A21_GRAVITY_M_S2!r}"
+                )
+
+        if environment.all_completed:
+            raise RuntimeError(
+                "A2.1 reset unexpectedly returned all worlds completed"
+            )
+
+        if any(per_world_completed(environment)):
+            raise RuntimeError(
+                "A2.1 reset returned a completed world"
+            )
+
+        if not bool(torch.isfinite(observations).all().item()):
+            raise RuntimeError(
+                "A2.1 reset observations contain non-finite values"
+            )
+
+        run["observation_shape"] = tensor_shape(observations)
+
+        # Capture controller targets once from the real reset state.
+        target_positions = torch.stack(
+            [
+                world.episode.physics.position
+                for world in environment.worlds
+            ],
+            dim=0,
+        ).detach().clone()
+
+        previous_completed = per_world_completed(environment)
+        shift_observed = False
+
+        for transition in range(1, A21_EPISODE_STEPS + 1):
+            if environment.all_completed:
+                raise RuntimeError(
+                    "A2.1 worlds completed before the full episode: "
+                    f"before transition {transition}"
+                )
+
+            before = pre_step_counts(environment)
+
+            if before["worlds_advancing"] != batch:
+                raise RuntimeError(
+                    "A2.1 requires every world to advance on every "
+                    f"transition; transition {transition} had "
+                    f"{before['worlds_advancing']} active worlds"
+                )
+
+            actions = a21_controller_actions(
+                environment,
+                target_positions,
+            )
+
+            (
+                next_environment,
+                observations,
+                rewards,
+                terminated,
+                truncated,
+                info,
+            ) = step(environment, actions)
+
+            # Install the actual returned state before any later check.
+            environment = next_environment
+
+            # Record this successful public transition before validating
+            # geometry or any subsequent invariant.
+            add_step_accounting(
+                accounting,
+                before,
+                previous_completed,
+                environment,
+                info,
+            )
+
+            # Check geometry after accounting so a transient geometry defect
+            # cannot leave the run's state/accounting receipt one step stale.
+            current_geometry = geometry_inventory(environment)
+            run["geometry_validation_checks"] += 1
+            run["geometry_world_validation_checks"] += batch
+            run["geometry_last_checked_transition"] = transition
+
+            if current_geometry != initial_geometry:
+                raise RuntimeError(
+                    "A2.1 geometry inventory changed during the episode "
+                    f"at transition {transition}: "
+                    f"expected={initial_geometry!r}, "
+                    f"actual={current_geometry!r}"
+                )
+
+            validate_a21_geometry(current_geometry, batch)
+
+            actual_steps = per_world_steps(environment)
+            if actual_steps != [transition] * batch:
+                raise RuntimeError(
+                    "A2.1 per-world transition count diverged at "
+                    f"transition {transition}: {actual_steps!r}"
+                )
+
+            completed_now = per_world_completed(environment)
+
+            if transition < A21_EPISODE_STEPS and any(completed_now):
+                raise RuntimeError(
+                    "A2.1 world completed before the deadline at "
+                    f"transition {transition}: {completed_now!r}"
+                )
+
+            if not bool(torch.isfinite(observations).all().item()):
+                raise RuntimeError(
+                    "A2.1 observations contain non-finite values at "
+                    f"transition {transition}"
+                )
+
+            shift_observation = a21_validate_shift_transition(
+                info,
+                environment,
+                transition,
+            )
+
+            if shift_observation is not None:
+                run["gravity_shift_observation"] = shift_observation
+                shift_observed = True
+
+            previous_completed = completed_now
+
+            if transition % 100 == 0:
+                run["last_recorded_transition"] = transition
+                run["partial_inventory"] = final_inventory(environment)
+                atomic_write_json(output_path, run)
+
+        if not shift_observed:
+            raise RuntimeError(
+                "A2.1 completed its loop without observing the gravity shift"
+            )
+
+        expected_geometry_checks = A21_EPISODE_STEPS
+        expected_geometry_world_checks = A21_EPISODE_STEPS * batch
+
+        if run["geometry_validation_checks"] != expected_geometry_checks:
+            raise RuntimeError(
+                "A2.1 did not validate geometry on every episode transition: "
+                f"{run['geometry_validation_checks']} != "
+                f"{expected_geometry_checks}"
+            )
+
+        if (
+            run["geometry_world_validation_checks"]
+            != expected_geometry_world_checks
+        ):
+            raise RuntimeError(
+                "A2.1 geometry world-check count is incorrect: "
+                f"{run['geometry_world_validation_checks']} != "
+                f"{expected_geometry_world_checks}"
+            )
+
+        if run["geometry_last_checked_transition"] != A21_EPISODE_STEPS:
+            raise RuntimeError(
+                "A2.1 geometry validation did not reach the final transition"
+            )
+
+        run["geometry_validation_complete"] = True
+
+        final_geometry = geometry_inventory(environment)
+        validate_a21_geometry(final_geometry, batch)
+
+        if final_geometry != initial_geometry:
+            raise RuntimeError(
+                "A2.1 static geometry inventory changed during the episode"
+            )
+
+        inventory = final_inventory(environment)
+
+        if inventory["world_step_counts"] != (
+            [A21_EPISODE_STEPS] * batch
+        ):
+            raise RuntimeError(
+                "A2.1 final per-world step counts do not equal 2,400"
+            )
+
+        if inventory["worlds_completed"] != batch:
+            raise RuntimeError(
+                "A2.1 expected all worlds to complete at the episode "
+                f"deadline; got {inventory['worlds_completed']} of {batch}"
+            )
+
+        if accounting["world_step_transitions"] != (
+            batch * A21_EPISODE_STEPS
+        ):
+            raise RuntimeError(
+                "A2.1 world-step accounting does not match actual "
+                "per-world transitions"
+            )
+
+        if accounting["candidate_slot_transitions"] != (
+            batch * candidates * A21_EPISODE_STEPS
+        ):
+            raise RuntimeError(
+                "A2.1 candidate-slot accounting does not match "
+                "the executed workload"
+            )
+
+        if accounting["step_calls"] != A21_EPISODE_STEPS:
+            raise RuntimeError(
+                "A2.1 public step-call count is not 2,400"
+            )
+
+        if accounting["newly_completed_worlds"] != batch:
+            raise RuntimeError(
+                "A2.1 completion-event accounting does not match "
+                "the batch size"
+            )
+
+        run["final_geometry_inventory"] = final_geometry
+        run["final_inventory"] = inventory
+        run["final_event_counts"] = dict(
+            accounting["transition_event_counts"]
+        )
+        run["status"] = "completed"
+        run["termination_reason"] = "episode_deadline"
+        run["last_recorded_transition"] = A21_EPISODE_STEPS
+
+    except KeyboardInterrupt:
+        run["status"] = "interrupted"
+        run["exception"] = "KeyboardInterrupt"
+        run["traceback"] = traceback.format_exc()
+
+        if environment is not None:
+            run["partial_inventory"] = final_inventory(environment)
+
+    except Exception as exc:
+        run["status"] = "failed"
+        run["exception"] = repr(exc)
+        run["traceback"] = traceback.format_exc()
+
+        if environment is not None:
+            run["partial_inventory"] = final_inventory(environment)
+
+    finally:
+        run["accounting"] = {
+            **accounting,
+            "transition_event_counts": dict(
+                accounting["transition_event_counts"]
+            ),
+        }
+        run["finished_utc"] = utc_now()
+        atomic_write_json(output_path, run)
+
+    return run
+

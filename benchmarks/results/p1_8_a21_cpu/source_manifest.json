@@ -1,0 +1,155 @@
+{
+  "protocol": "P1.8-A2.1",
+  "scope": "controlled B1/N1 seed-7 CPU stress correctness, not throughput or overall P1.8-A acceptance",
+  "parent_checkout_revision": "a181451f2e0f6eb79564d11f64267ea0208ddef0",
+  "tested_checkout_dirty": true,
+  "files": {
+    "benchmarks/environment_benchmark.py": "eabbbf393395cbc0b65fa45b146abd710a72f7038e6210a2eeb69fd880c1bc88",
+    "tests/test_environment_benchmark_a21.py": "7850dc123b3569c07803483aefbd09143d8aa20c3993271d99cf09088fd5d284",
+    "tests/test_environment_benchmark_a21_regressions.py": "1dd71a91d2cb1c92e65d21ca8503641dd2292915542762d3512612a2a7394054",
+    "tests/test_environment_benchmark.py": "15960a0fec0fb074ed70c239d0bc3f77125f9ca9678c452576722bffc17f0641",
+    "tests/test_environment_benchmark_regressions.py": "b7279e0d3ce9e299181d3e736c97e30741992ea25a3971abe5f924b3e69925a4"
+  },
+  "frozen_p0_tag_commit": "d82d8e1d910285b4d95ca7a64ad71d4a2437a883",
+  "frozen_python_files_verified": 20,
+  "evidence_handling": {
+    "focused_tests.txt": {
+      "original_capture_sha256": "654fa3f96860352e8e5a8035d76d5fd28a1e86fdad27aa97ec370820b51185c6",
+      "saved_evidence_sha256": "654fa3f96860352e8e5a8035d76d5fd28a1e86fdad27aa97ec370820b51185c6",
+      "change": "Exact original capture."
+    },
+    "cpu_suite.txt": {
+      "original_capture_sha256": "0549e19614535cb43a1cb3eccfec9f595aeb7c9c96349956d3a1282fa2108138",
+      "saved_evidence_sha256": "a7f3d017f8589f6a4addc0fe47aeff97ebda40b6f67f6c78d666222fd34f6341",
+      "change": "Execution-root prefix removed from two warning locations; explanatory header added."
+    },
+    "full_episode.json": {
+      "original_capture_sha256": "de00c532e3a69260be8034ed3ddf7c34fe30965871c3648c3038715c8f9a44c4",
+      "saved_evidence_sha256": "de00c532e3a69260be8034ed3ddf7c34fe30965871c3648c3038715c8f9a44c4",
+      "change": "Exact original receipt."
+    },
+    "negative_receipts/a21_early_completion.json": {
+      "original_capture_sha256": "d751cb9e3cfe72a59d73060c4606901dcdab95d0ddf32a24343d518c32b97323",
+      "saved_evidence_sha256": "d751cb9e3cfe72a59d73060c4606901dcdab95d0ddf32a24343d518c32b97323",
+      "change": "Exact original receipt. Negative cases intentionally contain injected test failures."
+    },
+    "negative_receipts/a21_nonfinite_observation.json": {
+      "original_capture_sha256": "1096fe648af72b9c7780c69e18bf721d7ef024f2833deffb41a74a2fb66a184b",
+      "saved_evidence_sha256": "1096fe648af72b9c7780c69e18bf721d7ef024f2833deffb41a74a2fb66a184b",
+      "change": "Exact original receipt. Negative cases intentionally contain injected test failures."
+    },
+    "negative_receipts/a21_transient_geometry.json": {
+      "original_capture_sha256": "39e7db26d6a3b56f3d82955339c5cc29a757fffc5810d1a0ce4e83399d108477",
+      "saved_evidence_sha256": "39e7db26d6a3b56f3d82955339c5cc29a757fffc5810d1a0ce4e83399d108477",
+      "change": "Exact original receipt. Negative cases intentionally contain injected test failures."
+    }
+  },
+  "receipt_identity_caveat": "The exact original receipt retains the legacy declared source revision ac7e047 and declared_revision_matches_checkout=false. Actual checkout parent is a181451 and dirty=true; source and test hashes identify this tested candidate.",
+  "readme_provenance": {
+    "author": "ChatGPT project conversation",
+    "presentation_changes": "Rendered writing block converted to Markdown. Straight quotes and comma punctuation normalized. No substantive content changed.",
+    "receipt_declared_revision_caveat": "See receipt_identity_caveat; exact receipt preserved."
+  },
+  "frozen_p0_python_sha256": {
+    "benchmarks/physics_benchmark.py": {
+      "sha256": "1c83a126e945bdeabfc10273f471e5737b2b85efd1505b20d29ea87a240818f1",
+      "size_bytes": 2851,
+      "status": "verified"
+    },
+    "benchmarks/validate_p0.py": {
+      "sha256": "baf525a1e863ee1d95686e51de2e65b574c79a4c6f5c9a1d0b8391295d147df7",
+      "size_bytes": 1134,
+      "status": "verified"
+    },
+    "lawless/__init__.py": {
+      "sha256": "cbcc4d8f7610f5d1f2d9b597500ed568894ea14604facd05ad3048dca6a28477",
+      "size_bytes": 88,
+      "status": "verified"
+    },
+    "lawless/physics/__init__.py": {
+      "sha256": "3fd1220466436d14ac6eda7839a3d69ec9c419a4139ad6d527c8237594cc8452",
+      "size_bytes": 217,
+      "status": "verified"
+    },
+    "lawless/physics/constants.py": {
+      "sha256": "8555fe0885080b49ff0fd232b02fc07a378466ef621e87410f4c5ba6d4f9b36e",
+      "size_bytes": 1440,
+      "status": "verified"
+    },
+    "lawless/physics/dynamics.py": {
+      "sha256": "ce55a1ae78066689abbad7bf6ddb1f7829a1e5d6b16e418809a3a5fc0c051386",
+      "size_bytes": 2117,
+      "status": "verified"
+    },
+    "lawless/physics/energy.py": {
+      "sha256": "dc24d9299e8243afefef9a0c1c1c752ffe0a4189b030cd5e6d9cf0ee01d10684",
+      "size_bytes": 781,
+      "status": "verified"
+    },
+    "lawless/physics/integrator.py": {
+      "sha256": "c7740c993f3d0aab32c4704cceca58c206f284ce6088113d78de884fa5274f09",
+      "size_bytes": 791,
+      "status": "verified"
+    },
+    "lawless/physics/simulator.py": {
+      "sha256": "36be44e772acb56a00afc5a03bad2c8a5bc56fad16512baf99abd13ef6571b9c",
+      "size_bytes": 2765,
+      "status": "verified"
+    },
+    "lawless/physics/state.py": {
+      "sha256": "ea4440d5289e535b198dcf2006c4a4ef9456f5016733b1c35df2f1f8742baded",
+      "size_bytes": 2806,
+      "status": "verified"
+    },
+    "tests/conftest.py": {
+      "sha256": "b4f750b435cea64ea749fe448f0391a03e547cc8d0c0af9e727721e251d9e3e0",
+      "size_bytes": 192,
+      "status": "verified"
+    },
+    "tests/test_config.py": {
+      "sha256": "d6213f77a8763097afb3a6785670a41823e58dc3b1d575a420024e528b62bdaf",
+      "size_bytes": 323,
+      "status": "verified"
+    },
+    "tests/test_determinism.py": {
+      "sha256": "9038fa8892efe95ff7bf7a07490d1acdbdbac97e176564f15c3a9fc2f976541a",
+      "size_bytes": 643,
+      "status": "verified"
+    },
+    "tests/test_dynamics.py": {
+      "sha256": "aa0d8c7309af0caddb34f8d78f1a14102ccbb7baa1f9c8ab44abeefa78f86bf7",
+      "size_bytes": 3339,
+      "status": "verified"
+    },
+    "tests/test_energy.py": {
+      "sha256": "3b2546eb3150d21e56853253420c4d7b3a315eec835e85ba412e24c2dd9698e3",
+      "size_bytes": 1028,
+      "status": "verified"
+    },
+    "tests/test_gravity.py": {
+      "sha256": "748f1510d6b90df6000f584262ee0219c9b63962884651fdf4f1276c96ee2c00",
+      "size_bytes": 709,
+      "status": "verified"
+    },
+    "tests/test_integrator.py": {
+      "sha256": "30230cfaa2ca6de8109c5fa448143aa3683318f139827a19513ecba90c1af648",
+      "size_bytes": 1431,
+      "status": "verified"
+    },
+    "tests/test_simulator.py": {
+      "sha256": "16afe930e32b975bae6916d42402b421be7f19d40abd4d40633ffe73dd1a2391",
+      "size_bytes": 3931,
+      "status": "verified"
+    },
+    "tests/test_state.py": {
+      "sha256": "565b4a9c26762df2db67e9de34cd65ff52bb62394347c1868ad8e3d273573c6a",
+      "size_bytes": 640,
+      "status": "verified"
+    },
+    "tests/test_vectorization.py": {
+      "sha256": "591f40373e962613dbe6c261d016085be397ce33e71fad26b8c9fc52af8a2bbd",
+      "size_bytes": 1314,
+      "status": "verified"
+    }
+  }
+}
