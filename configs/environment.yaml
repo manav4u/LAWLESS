@@ -1,0 +1,46 @@
+# LAWLESS P1.0
+# Provisional environment defaults.
+# This file defines configuration only; no simulation is implemented here.
+
+seed: 42
+
+world:
+  width_m: 100.0
+  height_m: 100.0
+
+  obstacle_count: 20
+  obstacle_radius_min_m: 1.0
+  obstacle_radius_max_m: 3.0
+
+embodiment:
+  agent_radius_m: 0.5
+
+objectives:
+  core_count: 8
+  core_radius_m: 0.75
+  core_energy_j: 25.0
+  extraction_radius_m: 3.0
+
+sensors:
+  lidar_ray_count: 8
+  lidar_range_m: 20.0
+
+episode:
+  episode_duration_s: 40.0
+  shift_time_s: 20.0
+  dt_s: 0.016666666666666666
+
+  gravity_m_s2: 4.0
+
+  gravity_directions:
+    - [0.0, 1.0]
+    - [1.0, 0.0]
+    - [0.0, -1.0]
+    - [-1.0, 0.0]
+
+  linear_damping_s_inv:
+    - 0.05
+    - 0.15
+    - 0.30
+
+  angular_damping_s_inv: 0.20
