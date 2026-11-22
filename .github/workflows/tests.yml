@@ -9,9 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Verify frozen P0 source tag
+        run: |
+          set -euo pipefail
+          expected="d82d8e1d910285b4d95ca7a64ad71d4a2437a883"
+          actual="$(git rev-parse --verify 'refs/tags/p0-validated^{commit}')"
+          if [ "$actual" != "$expected" ]; then
+            echo "::error::p0-validated resolves to $actual; expected $expected"
+            exit 1
+          fi
+          echo "Verified p0-validated -> $actual"
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
+
       - run: pip install -e '.[dev]'
       - run: pytest -q
