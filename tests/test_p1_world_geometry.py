@@ -181,6 +181,6 @@ def test_geometry_preserves_cuda_device_when_available():
     clearance = point_circle_signed_clearance(points, obstacles)
     contacts = point_circle_contact(points, obstacles)
 
-    assert clearance.device == device
-    assert contacts.device == device
+    assert clearance.device == points.device
+    assert contacts.device == points.device
     assert contacts.tolist() == [[True], [False]]
