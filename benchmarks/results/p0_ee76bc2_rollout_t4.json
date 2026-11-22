@@ -1,0 +1,17 @@
+{
+  "validation_code_commit": "ee76bc230a379172cce8f8ed602d3aa8a08831f5",
+  "duration_seconds": 40.0,
+  "steps": 2400,
+  "devices": [
+    "cpu",
+    "cuda"
+  ],
+  "max_abs_deviation": {
+    "position": 0.0001220703125,
+    "velocity": 3.814697265625e-06,
+    "angle": 0.0,
+    "angular_velocity": 0.0,
+    "energy": 0.0
+  },
+  "interpretation": "Long-rollout deviations are measured, not a strict equality contract. The separate one-step CPU/CUDA agreement test is the strict numerical gate."
+}
