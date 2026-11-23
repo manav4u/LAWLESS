@@ -1,0 +1,38 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.2.0, pluggy-1.7.0
+rootdir: /tmp/LAWLESS
+configfile: pyproject.toml
+plugins: platformdirs-4.12.4, anyio-4.16.0
+collected 485 items
+
+tests/test_benchmark_full_layout.py .......                              [  1%]
+tests/test_dynamics.py .....                                             [  2%]
+tests/test_environment_benchmark.py ....................                 [  6%]
+tests/test_environment_benchmark_a22.py ........s....................... [ 13%]
+.......................................                                  [ 21%]
+tests/test_environment_profile_a22.py .................................. [ 28%]
+..........                                                               [ 30%]
+tests/test_gravity.py ...                                                [ 30%]
+tests/test_observation_normalization.py ............                     [ 33%]
+tests/test_p14_cores.py ..............................ss................ [ 43%]
+.............                                                            [ 45%]
+tests/test_p1_batch_a_rng_regression.py .                                [ 46%]
+tests/test_p1_config.py ................................................ [ 56%]
+........................................................................ [ 70%]
+............................                                             [ 76%]
+tests/test_p1_environment_acceptance.py ..........                       [ 78%]
+tests/test_p1_generated_world.py ....................................... [ 86%]
+.................ssss                                                    [ 91%]
+tests/test_p1_obstacle_rng_helper.py .....ss......s                      [ 94%]
+tests/test_p1_world_state.py ...........................s                [ 99%]
+tests/test_vectorization.py .                                            [100%]
+
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_environment_benchmark_a22.py:318: CUDA is not required for the CPU test suite
+SKIPPED [2] tests/test_p14_cores.py:609: requires an actual CUDA device
+SKIPPED [2] tests/test_p1_generated_world.py:396: CUDA is not available
+SKIPPED [2] tests/test_p1_generated_world.py:445: CUDA is not available
+SKIPPED [2] tests/test_p1_obstacle_rng_helper.py:116: CUDA unavailable
+SKIPPED [1] tests/test_p1_obstacle_rng_helper.py:354: CUDA unavailable
+SKIPPED [1] tests/test_p1_world_state.py:261: CUDA is not available
+================== 474 passed, 11 skipped in 71.33s (0:01:11) ==================

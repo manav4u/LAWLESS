@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.2.0, pluggy-1.7.0
+rootdir: /tmp/LAWLESS
+configfile: pyproject.toml
+testpaths: tests
+plugins: platformdirs-4.12.4, anyio-4.16.0
+collected 1310 items
+
+tests/test_benchmark_full_layout.py .......                              [  0%]
+tests/test_config.py ..                                                  [  0%]
+tests/test_determinism.py .                                              [  0%]
+tests/test_dynamics.py .....                                             [  1%]
+tests/test_embodiment.py ......................ss....................... [  4%]
+........................ssss....ssss....ssss....ssss                     [  8%]
+tests/test_energy.py ..                                                  [  8%]
+tests/test_environment_benchmark.py ....................                 [ 10%]
+tests/test_environment_benchmark_a21.py .........                        [ 11%]
+tests/test_environment_benchmark_a21_regressions.py ............         [ 11%]
+tests/test_environment_benchmark_a22.py ........s....................... [ 14%]
+.......................................                                  [ 17%]
+tests/test_environment_benchmark_regressions.py ........................ [ 19%]
+.....................................................                    [ 23%]
+tests/test_environment_cuda_observation_equivalence.py s                 [ 23%]
+tests/test_environment_profile_a22.py .................................. [ 25%]
+..........                                                               [ 26%]
+tests/test_episode_determinism.py ......                                 [ 27%]
+tests/test_full_generator.py ..............ss........................... [ 30%]
+.....                                                                    [ 30%]
+tests/test_gravity.py ...                                                [ 31%]
+tests/test_integrator.py ...                                             [ 31%]
+tests/test_objective_state.py .......................................... [ 34%]
+..s.s.s.s.s.s.ss                                                         [ 35%]
+tests/test_observation_normalization.py ............                     [ 36%]
+tests/test_observations.py ..ss......................................... [ 40%]
+....................ss.s.s..ss..ss..ss........                           [ 43%]
+tests/test_p13_collision.py ...................................ss....... [ 46%]
+.........                                                                [ 47%]
+tests/test_p14_cores.py ..............................ss................ [ 51%]
+.............                                                            [ 52%]
+tests/test_p14_extraction.py ........................................... [ 55%]
+.........ss........                                                      [ 57%]
+tests/test_p15_lidar.py ............................s.ss..ss............ [ 60%]
+....................ssssssssssssssssssssssss....ssss......ssssss........ [ 66%]
+................ssssssssssssssssssssssss                                 [ 69%]
+tests/test_p1_batch_a_rng_regression.py .                                [ 69%]
+tests/test_p1_batch_equivalence.py ..                                    [ 69%]
+tests/test_p1_boundaries.py ...................s                         [ 70%]
+tests/test_p1_config.py ................................................ [ 74%]
+........................................................................ [ 80%]
+............................                                             [ 82%]
+tests/test_p1_cuda_batch_equivalence.py ss                               [ 82%]
+tests/test_p1_environment.py ...............                             [ 83%]
+tests/test_p1_environment_acceptance.py 

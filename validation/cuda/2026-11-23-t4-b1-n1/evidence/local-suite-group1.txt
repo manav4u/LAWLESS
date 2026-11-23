@@ -1,0 +1,47 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.2.0, pluggy-1.7.0
+rootdir: /tmp/LAWLESS
+configfile: pyproject.toml
+plugins: platformdirs-4.12.4, anyio-4.16.0
+collected 402 items
+
+tests/test_config.py ..                                                  [  0%]
+tests/test_embodiment.py ......................ss....................... [ 12%]
+........................ssss....ssss....ssss....ssss                     [ 25%]
+tests/test_environment_benchmark_a21.py .........                        [ 27%]
+tests/test_environment_benchmark_regressions.py ........................ [ 33%]
+.....................................................                    [ 46%]
+tests/test_episode_determinism.py ......                                 [ 48%]
+tests/test_integrator.py ...                                             [ 48%]
+tests/test_observations.py ..ss......................................... [ 59%]
+....................ss.s.s..ss..ss..ss........                           [ 71%]
+tests/test_p14_extraction.py ........................................... [ 82%]
+.........ss........                                                      [ 86%]
+tests/test_p1_batch_equivalence.py ..                                    [ 87%]
+tests/test_p1_cuda_batch_equivalence.py ss                               [ 87%]
+tests/test_p1_environment_cuda.py s.s                                    [ 88%]
+tests/test_p1_mixed_completion_freeze.py .                               [ 88%]
+tests/test_p1_world_generator.py ......................................s [ 98%]
+s                                                                        [ 98%]
+tests/test_simulator.py ....s                                            [100%]
+
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_embodiment.py:247: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:457: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:498: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:545: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:587: CUDA is not available
+SKIPPED [2] tests/test_observations.py:232: CUDA is unavailable
+SKIPPED [2] tests/test_observations.py:1072: CUDA is unavailable
+SKIPPED [2] tests/test_observations.py:1112: CUDA is unavailable
+SKIPPED [2] tests/test_observations.py:1137: CUDA is not available
+SKIPPED [2] tests/test_observations.py:1185: CUDA is not available
+SKIPPED [2] tests/test_observations.py:1233: CUDA is not available
+SKIPPED [2] tests/test_p14_extraction.py:769: CUDA hardware is unavailable
+SKIPPED [1] tests/test_p1_cuda_batch_equivalence.py:131: CUDA is required for this equivalence test
+SKIPPED [1] tests/test_p1_cuda_batch_equivalence.py:289: CUDA is required for this equivalence test
+SKIPPED [1] tests/test_p1_environment_cuda.py:63: CUDA is genuinely unavailable
+SKIPPED [1] tests/test_p1_environment_cuda.py:200: CUDA is genuinely unavailable
+SKIPPED [2] tests/test_p1_world_generator.py:425: CUDA is not available
+SKIPPED [1] tests/test_simulator.py:88: CUDA unavailable
+======================= 363 passed, 39 skipped in 38.16s =======================

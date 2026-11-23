@@ -1,0 +1,94 @@
+{
+  "all_assertions_passed": true,
+  "test_run": "local CPU-only fake probes",
+  "cases": [
+    {
+      "status": "passed",
+      "returncode": 0,
+      "timeout": false,
+      "leader_unreaped": false,
+      "group_cleanup_ok": true,
+      "error": null,
+      "case": "success",
+      "archive_bytes": 3404,
+      "archive_sha256": "62fd5a56a2840e7805f6f51819ff0eff21fef27bec83b0d7adda6f404219a1ca",
+      "pid_marker": null
+    },
+    {
+      "status": "failed",
+      "returncode": 7,
+      "timeout": false,
+      "leader_unreaped": false,
+      "group_cleanup_ok": true,
+      "error": null,
+      "case": "exit7",
+      "archive_bytes": 3163,
+      "archive_sha256": "1d793dad9edc23541051e727ed57791a4d10a83c7dbdf8c0ac2f7c9d25a150ef",
+      "pid_marker": null
+    },
+    {
+      "status": "failed",
+      "returncode": null,
+      "timeout": true,
+      "leader_unreaped": false,
+      "group_cleanup_ok": true,
+      "error": null,
+      "case": "hang",
+      "archive_bytes": 3131,
+      "archive_sha256": "8e1347abb72c0920f7fd3ce5af2869a97671369a0ab01ce38933c6574a75a89a",
+      "pid_marker": null
+    },
+    {
+      "status": "failed",
+      "returncode": null,
+      "timeout": true,
+      "leader_unreaped": false,
+      "group_cleanup_ok": true,
+      "error": null,
+      "case": "ignore",
+      "archive_bytes": 3375,
+      "archive_sha256": "23ebb02253e281db48487e33b17e25f77e42ef13bb9d7b8788f903c915ef1992",
+      "pid_marker": "28005"
+    },
+    {
+      "status": "passed",
+      "returncode": 0,
+      "timeout": false,
+      "leader_unreaped": false,
+      "group_cleanup_ok": true,
+      "error": null,
+      "case": "leaderexit",
+      "archive_bytes": 3352,
+      "archive_sha256": "5dba2ef04eef136f3c8462d3d2b5f1cae4879f962cfa77f54b6a9186bfe4f5fc",
+      "pid_marker": "28007"
+    },
+    {
+      "status": "failed",
+      "returncode": null,
+      "timeout": false,
+      "leader_unreaped": false,
+      "group_cleanup_ok": null,
+      "error": "FileNotFoundError(PosixPath('/tmp/lawless_cpu_supervisor_tests_8_0g7bqf/missing_probe.py'))",
+      "case": "missing",
+      "archive_bytes": 318,
+      "archive_sha256": "4a1bd088e25301aaf757a88afffd2ed7cced703eaf2be7b801130f297e247f4d",
+      "pid_marker": null
+    }
+  ],
+  "invalid_timeout_cases_rejected": [
+    0,
+    -1,
+    "NaN",
+    "Infinity",
+    "-Infinity",
+    true
+  ],
+  "own_process_group_refused": true,
+  "test_root": "/tmp/lawless_cpu_supervisor_tests_8_0g7bqf",
+  "gpu_attempted": false,
+  "limits": [
+    "Linux /proc/session process group containment only; not protection against deliberately escaping descendants.",
+    "Execution deadline 150 seconds, followed by bounded termination/reap checks; archive recovery runs after the execution deadline.",
+    "Component CUDA probe remains unexecuted and free GPU allocation remains unavailable."
+  ]
+}

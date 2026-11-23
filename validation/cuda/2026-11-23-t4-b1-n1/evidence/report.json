@@ -1,0 +1,87 @@
+{
+  "scope": "Evidence-only checkpoint, no GPU execution in this continuation",
+  "checkpoint_parent": "3bb5d9f4ff7551de5ec500b30a815a8ea915e5f4",
+  "monolithic_attempt": {
+    "status": "incomplete",
+    "reason": "external 120-second execution limit",
+    "last_reported_progress_percent": 83,
+    "exit_code": null
+  },
+  "complete_grouped_suite": {
+    "passed": 1173,
+    "skipped": 137,
+    "warnings": 34,
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "all_test_files_covered_once": true,
+    "test_file_count": 43,
+    "groups": [
+      [
+        "tests/test_benchmark_full_layout.py",
+        "tests/test_dynamics.py",
+        "tests/test_environment_benchmark.py",
+        "tests/test_environment_benchmark_a22.py",
+        "tests/test_environment_profile_a22.py",
+        "tests/test_gravity.py",
+        "tests/test_observation_normalization.py",
+        "tests/test_p14_cores.py",
+        "tests/test_p1_batch_a_rng_regression.py",
+        "tests/test_p1_config.py",
+        "tests/test_p1_environment_acceptance.py",
+        "tests/test_p1_generated_world.py",
+        "tests/test_p1_obstacle_rng_helper.py",
+        "tests/test_p1_world_state.py",
+        "tests/test_vectorization.py"
+      ],
+      [
+        "tests/test_config.py",
+        "tests/test_embodiment.py",
+        "tests/test_environment_benchmark_a21.py",
+        "tests/test_environment_benchmark_regressions.py",
+        "tests/test_episode_determinism.py",
+        "tests/test_integrator.py",
+        "tests/test_observations.py",
+        "tests/test_p14_extraction.py",
+        "tests/test_p1_batch_equivalence.py",
+        "tests/test_p1_cuda_batch_equivalence.py",
+        "tests/test_p1_environment_cuda.py",
+        "tests/test_p1_mixed_completion_freeze.py",
+        "tests/test_p1_world_generator.py",
+        "tests/test_simulator.py"
+      ],
+      [
+        "tests/test_determinism.py",
+        "tests/test_energy.py",
+        "tests/test_environment_benchmark_a21_regressions.py",
+        "tests/test_environment_cuda_observation_equivalence.py",
+        "tests/test_full_generator.py",
+        "tests/test_objective_state.py",
+        "tests/test_p13_collision.py",
+        "tests/test_p15_lidar.py",
+        "tests/test_p1_boundaries.py",
+        "tests/test_p1_environment.py",
+        "tests/test_p1_episode_state.py",
+        "tests/test_p1_objective_progression_equivalence.py",
+        "tests/test_p1_world_geometry.py",
+        "tests/test_state.py"
+      ]
+    ],
+    "note": "Three sequential groups; all skips report CUDA unavailable. No CUDA execution."
+  },
+  "cpu_supervisor_rerun": {
+    "exit_code": 0,
+    "all_assertions_passed": true,
+    "artifact_archive": "cpu-supervisor-rerun-artifacts.zip"
+  },
+  "component_probe": {
+    "status": "unexecuted",
+    "ast_parse": "passed"
+  },
+  "production_source_changed": false,
+  "p1_8_accepted": false,
+  "gpu_allocation_attempted": false,
+  "history_rewritten": false
+}
