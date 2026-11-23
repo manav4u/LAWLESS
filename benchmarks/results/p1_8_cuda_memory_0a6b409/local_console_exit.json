@@ -1,0 +1,5 @@
+{
+  "command": "python -m pytest -q",
+  "returncode": 0,
+  "finished_at": "2026-11-23T01:22:23.477741+00:00"
+}
