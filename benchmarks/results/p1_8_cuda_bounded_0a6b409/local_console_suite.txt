@@ -1,0 +1,85 @@
+.....................................ss................................. [  5%]
+..............ssss....ssss....ssss....ssss.............................. [ 11%]
+.....................s.................................................. [ 16%]
+........................................................................ [ 22%]
+.................s...................................................... [ 27%]
+..........ss............................................................ [ 33%]
+......................s.s.s.s.s.s.ss..............ss.................... [ 38%]
+.........................................ss.s.s..ss..ss..ss............. [ 44%]
+..............................ss........................................ [ 49%]
+......ss................................................................ [ 55%]
+.................ss....................................s.ss..ss......... [ 60%]
+.......................ssssssssssssssssssssssss....ssss......ssssss..... [ 66%]
+...................ssssssssssssssssssssssss......................s...... [ 71%]
+........................................................................ [ 77%]
+........................................................................ [ 82%]
+.......................s.s.s...........s.....s...ss..ss...s............. [ 88%]
+...........................................ssss.......ss......s......... [ 93%]
+.............................ss...............ss........................ [ 99%]
+...s....s...                                                             [100%]
+=============================== warnings summary ===============================
+tests/test_p13_collision.py: 17 warnings
+  /tmp/LAWLESS/tests/test_p13_collision.py:26: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    centers=torch.tensor(centers, dtype=dtype).reshape(-1, 2),
+
+tests/test_p13_collision.py: 17 warnings
+  /tmp/LAWLESS/tests/test_p13_collision.py:27: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    radii=torch.tensor(radii, dtype=dtype).reshape(-1),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_embodiment.py:247: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:457: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:498: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:545: CUDA is not available
+SKIPPED [4] tests/test_embodiment.py:587: CUDA is not available
+SKIPPED [1] tests/test_environment_benchmark_a22.py:318: CUDA is not required for the CPU test suite
+SKIPPED [1] tests/test_environment_cuda_observation_equivalence.py:162: CUDA observation equivalence requires an available CUDA device
+SKIPPED [2] tests/test_full_generator.py:361: CUDA unavailable
+SKIPPED [1] tests/test_objective_state.py:354: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:397: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:428: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:453: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:475: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:499: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:522: CUDA is not available
+SKIPPED [1] tests/test_objective_state.py:559: CUDA is not available
+SKIPPED [2] tests/test_observations.py:232: CUDA is unavailable
+SKIPPED [2] tests/test_observations.py:1072: CUDA is unavailable
+SKIPPED [2] tests/test_observations.py:1112: CUDA is unavailable
+SKIPPED [2] tests/test_observations.py:1137: CUDA is not available
+SKIPPED [2] tests/test_observations.py:1185: CUDA is not available
+SKIPPED [2] tests/test_observations.py:1233: CUDA is not available
+SKIPPED [2] tests/test_p13_collision.py:544: CUDA unavailable
+SKIPPED [2] tests/test_p14_cores.py:609: requires an actual CUDA device
+SKIPPED [2] tests/test_p14_extraction.py:769: CUDA hardware is unavailable
+SKIPPED [1] tests/test_p15_lidar.py:558: CUDA is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:619: CUDA hardware is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:754: CUDA hardware is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:1122: CUDA is unavailable
+SKIPPED [2] tests/test_p15_lidar.py:1150: CUDA is unavailable
+SKIPPED [16] tests/test_p15_lidar.py:1174: CUDA is unavailable
+SKIPPED [4] tests/test_p15_lidar.py:1206: CUDA is unavailable
+SKIPPED [4] tests/test_p15_lidar.py:1306: CUDA is unavailable
+SKIPPED [6] tests/test_p15_lidar.py:1384: CUDA is unavailable
+SKIPPED [12] tests/test_p15_lidar.py:1507: CUDA is unavailable
+SKIPPED [12] tests/test_p15_lidar.py:1543: CUDA is unavailable
+SKIPPED [1] tests/test_p1_boundaries.py:178: CUDA is not available
+SKIPPED [1] tests/test_p1_environment_cuda.py:63: CUDA is genuinely unavailable
+SKIPPED [1] tests/test_p1_environment_cuda.py:200: CUDA is genuinely unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:78: CUDA unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:316: CUDA unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:443: CUDA unavailable
+SKIPPED [2] tests/test_p1_episode_state.py:513: CUDA unavailable
+SKIPPED [2] tests/test_p1_episode_state.py:588: CUDA unavailable
+SKIPPED [1] tests/test_p1_episode_state.py:770: CUDA unavailable
+SKIPPED [2] tests/test_p1_generated_world.py:396: CUDA is not available
+SKIPPED [2] tests/test_p1_generated_world.py:445: CUDA is not available
+SKIPPED [2] tests/test_p1_obstacle_rng_helper.py:116: CUDA unavailable
+SKIPPED [1] tests/test_p1_obstacle_rng_helper.py:354: CUDA unavailable
+SKIPPED [2] tests/test_p1_world_generator.py:425: CUDA is not available
+SKIPPED [1] tests/test_p1_world_geometry.py:158: CUDA is not available
+SKIPPED [1] tests/test_p1_world_geometry.py:172: CUDA is not available
+SKIPPED [1] tests/test_p1_world_state.py:261: CUDA is not available
+SKIPPED [1] tests/test_simulator.py:88: CUDA unavailable
+1173 passed, 135 skipped, 34 warnings in 113.97s (0:01:53)
