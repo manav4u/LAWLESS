@@ -121,6 +121,17 @@ def _positive_int(value: Any, label: str) -> int:
         raise ValueError(f"{label} must be a positive integer")
     return value
 
+def _consumed_int(value, label, terminal_status):
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ValueError(f"{label} must be an integer")
+    if value < 0:
+        raise ValueError(f"{label} must be nonnegative")
+    if terminal_status == "completed" and value == 0:
+        raise ValueError(f"{label} must be positive for completed")
+    if terminal_status != "completed" and terminal_status not in TERMINAL_STATUSES:
+        raise ValueError("Invalid terminal status")
+    return value
+
 def create_execution_receipt(
     *,
     repo_root: str | Path,
@@ -148,7 +159,11 @@ def create_execution_receipt(
         authorization.get("max_candidate_evaluations"),
         "Authorized budget",
     )
-    consumed = _positive_int(consumed_budget, "Consumed budget")
+    if terminal_status not in TERMINAL_STATUSES:
+        raise ValueError("Unsupported terminal status")
+    consumed = _consumed_int(consumed_budget, "Consumed budget",
+                             terminal_status)
+
     if consumed > authorized_budget:
         raise ValueError("Consumed budget exceeds C4 authorization")
     start = _utc(started_utc)
@@ -287,12 +302,13 @@ def _verify_remaining(
     provenance_path: str | Path,
     source_files: tuple[str, ...] | None,
 ) -> dict[str, Any]:
+    status = record.get("terminal_status")
     authorized = record.get("authorized_candidate_evaluations")
     consumed = record.get("consumed_candidate_evaluations")
 
     try:
         authorized = _positive_int(authorized, "Authorized budget")
-        consumed = _positive_int(consumed, "Consumed budget")
+        consumed = _consumed_int(consumed, "Consumed budget", status)
         if consumed > authorized:
             _failure(failures, "budget_exceeded",
                      "Consumed budget exceeds authorized budget")

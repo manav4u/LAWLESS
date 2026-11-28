@@ -222,3 +222,25 @@ def test_verification_is_deterministic(setup_receipt):
     first = verify()
     second = verify()
     assert first == second
+
+
+import pytest
+from lawless.optimization.execution_receipt import _consumed_int
+def test_zero_consumed_allowed_interrupted():
+    assert _consumed_int(0, "Consumed", "interrupted") == 0
+
+def test_zero_consumed_allowed_timed_out():
+    assert _consumed_int(0, "Consumed", "timed_out") == 0
+def test_zero_consumed_allowed_failed():
+    assert _consumed_int(0, "Consumed", "failed") == 0
+
+def test_zero_consumed_completed_rejected():
+    with pytest.raises(ValueError):
+        _consumed_int(0, "Consumed", "completed")
+
+def test_consumed_bool_rejected():
+    with pytest.raises(ValueError):
+        _consumed_int(True, "Consumed", "failed")
+def test_negative_consumed_rejected():
+    with pytest.raises(ValueError):
+        _consumed_int(-1, "Consumed", "timed_out")
